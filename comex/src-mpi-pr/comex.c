@@ -297,7 +297,7 @@ int comex_init()
     status = MPI_Initialized(&init_flag);
     CHECK_MPI_RETVAL(status);
     assert(init_flag);
-    
+
     /* groups */
     comex_group_init();
 
