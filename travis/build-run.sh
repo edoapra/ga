@@ -39,6 +39,7 @@ case "$MPI_IMPL" in
                 # Open MPI 2.0.x / v2.1.x won't startup otherwise
                 # https://www.open-mpi.org/faq/?category=osx
                 export TMPDIR=/tmp
+                export OMPI_MCA_rmaps_base_oversubscribe=1
             ;;
             Linux)
                 echo "Linux"
