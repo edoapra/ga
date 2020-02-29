@@ -40,7 +40,7 @@ AC_SUBST([PACKAGE_VERSION])
 # ga version 5.7.1: 2:1:1
 #
 # libga -version-info current:revision:age
-LTVER="2:1:1"
+LTVER="2:2:1"
 AC_SUBST([LTVER])
 
 ###############################################################################
