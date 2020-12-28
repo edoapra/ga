@@ -19,26 +19,26 @@ jobs:
           - ofi
           - armci
           - mpi-pr
-        fc:
+        f77:
           - gfortran-9
         include:
           - os: ubuntu-20.04
             experimental: true 
             mpi_impl: mpich
             armci_network: mpi-pt
-            fc: gfortran-10
+            f77: gfortran-10
           - os: ubuntu-20.04
             experimental: true 
             mpi_impl: mpich
             armci_network: mpi-ts
             config_opts: "--disable-f77 --enable-cxx"
-            fc: gfortran-10
+            f77: gfortran-10
           - os: macos-11.0
             experimental: true 
             mpi_impl: mpich
             armci_network: mpi-ts
             config_opts: "--disable-static --enable-shared"
-            fc: gfortran-10
+            f77: gfortran-10
         exclude:
           - armci_network: mpi-pr
             mpi_impl: openmpi
@@ -50,7 +50,7 @@ jobs:
     env:
         MPI_IMPL: ${{ matrix.mpi_impl }}
         ARMCI_NETWORK: ${{ matrix.armci_network }}
-        FC: ${{ matrix.fc }}
+        F77: ${{ matrix.f77 }}
         CONFIG_OPTS: ${{ matrix.config_opts}}
     continue-on-error: ${{ matrix.experimental }}
     steps: 
