@@ -1,0 +1,86 @@
+name: NWChem_CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, macos-10.15]
+        experimental: [false]
+        mpi_impl:
+          - openmpi
+          - mpich
+        armci_network:
+          - mpi3
+          - mpi-ts
+          - ofi
+          - armci
+          - mpi-pr
+        nwchem_modules:
+          - "tinyqmpw python"
+          - "qmandpw qmd"
+          - "tce"
+        fc:
+          - gfortran-9
+        include:
+          - os: ubuntu-20.04
+            experimental: true 
+            mpi_impl: mpich
+            armci_network: mpi-pt
+            nwchem_modules: "nwdft solvation driver"
+            fc: gfortran-10
+            use_simint: 1
+          - os: ubuntu-20.04
+            experimental: true 
+            mpi_impl: mpich
+            armci_network: mpi-ts
+            config_opts: "--disable-f77 --enable-cxx"
+          - os: macos-11.0
+            experimental: true 
+            mpi_impl: mpich
+            armci_network: mpi-ts
+            config_opts: "--disable-static --enable-shared"
+      fail-fast: false
+    env:
+        MPI_IMPL: ${{ matrix.mpi_impl }}
+        ARMCI_NETWORK: ${{ matrix.armci_network }}
+        TRAVIS_ROOT: $HOME/travis
+        FC: ${{ matrix.fc }}
+    continue-on-error: ${{ matrix.experimental }}
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 40
+      - name: before_install
+        run: |
+          pwd
+          mkdir -p $TRAVIS_ROOT
+          ls -lart
+          sh ./travis/install-autotools.sh $TRAVIS_ROOT
+      - name: install
+        run: |
+          sh ./travis/install-mpi.sh $TRAVIS_ROOT $MPI_IMPL
+          if [[ "$PORT" == "ofi" ]]; then sh ./travis/install-libfabric.sh $TRAVIS_ROOT; fi
+          if [[ "$PORT" == "armci" ]]; then sh ./travis/install-armci-mpi.sh $TRAVIS_ROOT; fi
+          if [[ ( "$PORT" == "mpi-pr" ) && ( $(uname) == "Linux" ) ]]; then sh ./travis/install-sicm.sh $HOME/no_cache; fi
+      - name: script
+        run: |
+          pwd
+          ls -lart
+          sh ./travis/build-run.sh $TRAVIS_ROOT $PORT $MPI_IMPL
+      - name: after_failure
+        if: ${{ failure() }}
+        run: |
+          pwd
+          ls
+          find . -name config.log -exec cat {} ";"
+          cat ./test-suite.log
+  
+
+
+
+     
