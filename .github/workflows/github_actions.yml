@@ -49,6 +49,7 @@ jobs:
       fail-fast: false
     env:
         MPI_IMPL: ${{ matrix.mpi_impl }}
+        PORT: ${{ matrix.armci_network }}
         ARMCI_NETWORK: ${{ matrix.armci_network }}
         F77: ${{ matrix.f77 }}
         CONFIG_OPTS: ${{ matrix.config_opts}}
@@ -88,7 +89,9 @@ jobs:
       - name: script
         run: |
           export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
-          sh ./travis/build-run.sh $TRAVIS_ROOT $PORT $MPI_IMPL
+          ls -lrt 
+          if [[ ( "MPI_IMPL" == "openmpi" ) && ( $(uname) == "Linux" ) ]]; then ls -lrt open-mpi/bin ; fi
+          if [[ ( "MPI_IMPL" == "mpich" ) && ( $(uname) == "Linux" ) ]]; then ls -lrt mpich/bin ; fi
       - name: after_failure
         if: ${{ failure() }}
         run: |
