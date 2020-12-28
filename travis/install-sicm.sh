@@ -2,7 +2,8 @@
 
 # This should only be run on Linux machines, as OSX does not have NUMA
 # SICM has only been added to mpi-pr
-if [ "$TRAVIS_OS_NAME" != "linux" ] || [ "$PORT" != "mpi-pr" ]; then
+os=`uname`
+if [ "$os" != "linux" ] || [ "$PORT" != "mpi-pr" ]; then
     exit 1;
 fi
 
