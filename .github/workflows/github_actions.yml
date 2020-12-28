@@ -47,7 +47,6 @@ jobs:
     env:
         MPI_IMPL: ${{ matrix.mpi_impl }}
         ARMCI_NETWORK: ${{ matrix.armci_network }}
-        TRAVIS_ROOT: $GITHUB_WORKSPACE
         FC: ${{ matrix.fc }}
     continue-on-error: ${{ matrix.experimental }}
     steps: 
@@ -71,6 +70,7 @@ jobs:
         run: |
           pwd
           echo '#########111'
+          export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
           echo TRAVIS_ROOT is $TRAVIS_ROOT
           echo '#########222'
           mkdir -p $TRAVIS_ROOT
@@ -79,6 +79,8 @@ jobs:
           sh ./travis/install-autotools.sh $TRAVIS_ROOT
       - name: install
         run: |
+          export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
+          echo TRAVIS_ROOT is $TRAVIS_ROOT
           sh ./travis/install-mpi.sh $TRAVIS_ROOT $MPI_IMPL
           if [[ "$PORT" == "ofi" ]]; then sh ./travis/install-libfabric.sh $TRAVIS_ROOT; fi
           if [[ "$PORT" == "armci" ]]; then sh ./travis/install-armci-mpi.sh $TRAVIS_ROOT; fi
@@ -87,6 +89,8 @@ jobs:
         run: |
           pwd
           ls -lart
+          export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
+          echo TRAVIS_ROOT is $TRAVIS_ROOT
           sh ./travis/build-run.sh $TRAVIS_ROOT $PORT $MPI_IMPL
       - name: after_failure
         if: ${{ failure() }}
