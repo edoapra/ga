@@ -62,8 +62,8 @@ jobs:
         run: |
           case "${{ matrix.os }}" in
           ubuntu*|jessie|stretch|buster)
-          apt-get update -q -y
-          apt-get install -q -y sudo gfortran
+          sudo apt-get update -q -y
+          sudo apt-get install -q -y gfortran
           ;;
           macos*)
           brew update
