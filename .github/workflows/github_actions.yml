@@ -47,7 +47,7 @@ jobs:
     env:
         MPI_IMPL: ${{ matrix.mpi_impl }}
         ARMCI_NETWORK: ${{ matrix.armci_network }}
-        TRAVIS_ROOT: $HOME/travis
+        TRAVIS_ROOT: travis
         FC: ${{ matrix.fc }}
     continue-on-error: ${{ matrix.experimental }}
     steps: 
@@ -58,7 +58,11 @@ jobs:
       - name: before_install
         run: |
           pwd
+          echo '#########111'
+          echo TRAVIS_ROOT is $TRAVIS_ROOT
+          echo '#########222'
           mkdir -p $TRAVIS_ROOT
+          echo '#########333'
           ls -lart
           sh ./travis/install-autotools.sh $TRAVIS_ROOT
       - name: install
