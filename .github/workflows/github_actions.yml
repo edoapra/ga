@@ -22,6 +22,11 @@ jobs:
         f77:
           - gfortran-9
         include:
+          - os: ubuntu-16.04
+            experimental: true 
+            mpi_impl: mpich
+            armci_network: mpi-pr
+            f77: gfortran
           - os: ubuntu-20.04
             experimental: true 
             mpi_impl: mpich
@@ -80,7 +85,7 @@ jobs:
           ./travis/install-mpi.sh $TRAVIS_ROOT $MPI_IMPL
           if [[ "$PORT" == "ofi" ]]; then ./travis/install-libfabric.sh $TRAVIS_ROOT; else true;  fi
           if [[ "$PORT" == "armci" ]]; then ./travis/install-armci-mpi.sh $TRAVIS_ROOT; else true; fi
-          if [[ ( "$PORT" == "mpi-pr" ) && ( $(uname) == "Linux" ) ]]; then ./travis/install-sicm.sh $HOME/no_cache; else true; fi
+          if [[ ( "$PORT" == "mpi-pr" ) && ( $(os) == "ubuntu-16.04" ) ]]; then ./travis/install-sicm.sh $HOME/no_cache; else true; fi
       - name: compile and test global arrays
         if: ${{ success() }}
         run: |
