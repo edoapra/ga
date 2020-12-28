@@ -1,4 +1,4 @@
-name: NWChem_CI
+name: GlobalArrays_CI
 
 on: [push, pull_request]
 
@@ -19,10 +19,6 @@ jobs:
           - ofi
           - armci
           - mpi-pr
-        nwchem_modules:
-          - "tinyqmpw python"
-          - "qmandpw qmd"
-          - "tce"
         fc:
           - gfortran-9
         include:
@@ -30,24 +26,32 @@ jobs:
             experimental: true 
             mpi_impl: mpich
             armci_network: mpi-pt
-            nwchem_modules: "nwdft solvation driver"
             fc: gfortran-10
-            use_simint: 1
           - os: ubuntu-20.04
             experimental: true 
             mpi_impl: mpich
             armci_network: mpi-ts
             config_opts: "--disable-f77 --enable-cxx"
+            fc: gfortran-10
           - os: macos-11.0
             experimental: true 
             mpi_impl: mpich
             armci_network: mpi-ts
             config_opts: "--disable-static --enable-shared"
+            fc: gfortran-10
+        exclude:
+          - armci_network: mpi-pr
+            mpi_impl: openmpi
+          - armci_network: mpi3
+            mpi_impl: openmpi
+          - armci_network: ofi
+            mpi_impl: openmpi
       fail-fast: false
     env:
         MPI_IMPL: ${{ matrix.mpi_impl }}
         ARMCI_NETWORK: ${{ matrix.armci_network }}
         FC: ${{ matrix.fc }}
+        CONFIG_OPTS: ${{ matrix.config_opts}}
     continue-on-error: ${{ matrix.experimental }}
     steps: 
       - name: Checkout code
@@ -69,28 +73,21 @@ jobs:
       - name: before_install
         run: |
           pwd
-          echo '#########111'
           export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
           echo TRAVIS_ROOT is $TRAVIS_ROOT
-          echo '#########222'
           mkdir -p $TRAVIS_ROOT
-          echo '#########333'
           ls -lart
           sh ./travis/install-autotools.sh $TRAVIS_ROOT
       - name: install
         run: |
           export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
-          echo TRAVIS_ROOT is $TRAVIS_ROOT
           sh ./travis/install-mpi.sh $TRAVIS_ROOT $MPI_IMPL
           if [[ "$PORT" == "ofi" ]]; then sh ./travis/install-libfabric.sh $TRAVIS_ROOT; fi
           if [[ "$PORT" == "armci" ]]; then sh ./travis/install-armci-mpi.sh $TRAVIS_ROOT; fi
           if [[ ( "$PORT" == "mpi-pr" ) && ( $(uname) == "Linux" ) ]]; then sh ./travis/install-sicm.sh $HOME/no_cache; fi
       - name: script
         run: |
-          pwd
-          ls -lart
           export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
-          echo TRAVIS_ROOT is $TRAVIS_ROOT
           sh ./travis/build-run.sh $TRAVIS_ROOT $PORT $MPI_IMPL
       - name: after_failure
         if: ${{ failure() }}
