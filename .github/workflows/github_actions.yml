@@ -67,7 +67,6 @@ jobs:
           brew install gcc coreutils
           ;;
           esac
-
       - name: before_install
         run: |
           pwd
@@ -79,6 +78,7 @@ jobs:
           ls -lart
           sh ./travis/install-autotools.sh $TRAVIS_ROOT
       - name: install
+        run: |
           sh ./travis/install-mpi.sh $TRAVIS_ROOT $MPI_IMPL
           if [[ "$PORT" == "ofi" ]]; then sh ./travis/install-libfabric.sh $TRAVIS_ROOT; fi
           if [[ "$PORT" == "armci" ]]; then sh ./travis/install-armci-mpi.sh $TRAVIS_ROOT; fi
