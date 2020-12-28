@@ -57,7 +57,7 @@ cat > mpiimpl.h.patch <<EOF
 EOF
                     patch -p0 < mpiimpl.h.patch
                     mkdir -p build && cd build
-		    GNUMAJOR=`$FC -dM -E - < /dev/null 2> /dev/null | grep __GNUC__ |cut -c18-`
+		    GNUMAJOR=`$F77 -dM -E - < /dev/null 2> /dev/null | grep __GNUC__ |cut -c18-`
 		    if [[ $GNUMAJOR -ge 10  ]]; then
 			FFLAGS_IN="-w -fallow-argument-mismatch -O2"
 		    else
