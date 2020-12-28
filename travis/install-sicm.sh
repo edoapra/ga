@@ -3,7 +3,7 @@
 # This should only be run on Linux machines, as OSX does not have NUMA
 # SICM has only been added to mpi-pr
 os=`uname`
-if [ "$os" != "linux" ] || [ "$PORT" != "mpi-pr" ]; then
+if [ "$os" != "Linux" ] || [ "$PORT" != "mpi-pr" ]; then
     exit 1;
 fi
 

@@ -5,7 +5,7 @@ set -x
 
 TRAVIS_ROOT="$1"
 os=`uname`
-if [ "$os" = "linux" ] ; then
+if [ "$os" = "Linux" ] ; then
     case "$MPI_IMPL" in
         mpich)
             $TRAVIS_ROOT/mpich/bin/mpichversion
