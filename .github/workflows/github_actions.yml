@@ -83,15 +83,17 @@ jobs:
         run: |
           export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
           sh ./travis/install-mpi.sh $TRAVIS_ROOT $MPI_IMPL
-          if [[ "$PORT" == "ofi" ]]; then sh ./travis/install-libfabric.sh $TRAVIS_ROOT; fi
-          if [[ "$PORT" == "armci" ]]; then sh ./travis/install-armci-mpi.sh $TRAVIS_ROOT; fi
-          if [[ ( "$PORT" == "mpi-pr" ) && ( $(uname) == "Linux" ) ]]; then sh ./travis/install-sicm.sh $HOME/no_cache; fi
-      - name: script
+          if [[ "$PORT" == "ofi" ]]; then sh ./travis/install-libfabric.sh $TRAVIS_ROOT; else true;  fi
+          if [[ "$PORT" == "armci" ]]; then sh ./travis/install-armci-mpi.sh $TRAVIS_ROOT; else true; fi
+          if [[ ( "$PORT" == "mpi-pr" ) && ( $(uname) == "Linux" ) ]]; then sh ./travis/install-sicm.sh $HOME/no_cache; else true; fi
+      - name: compile and test global arrays
+        if: ${{ success() }}
         run: |
           export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
           ls -lrt 
           if [[ ( "MPI_IMPL" == "openmpi" ) && ( $(uname) == "Linux" ) ]]; then ls -lrt open-mpi/bin ; fi
           if [[ ( "MPI_IMPL" == "mpich" ) && ( $(uname) == "Linux" ) ]]; then ls -lrt mpich/bin ; fi
+          sh ./travis/build-run.sh $TRAVIS_ROOT $PORT $MPI_IMPL
       - name: after_failure
         if: ${{ failure() }}
         run: |
