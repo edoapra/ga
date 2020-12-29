@@ -74,23 +74,19 @@ jobs:
       - name: before_install
         run: |
           pwd
-          export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
-          echo TRAVIS_ROOT is $TRAVIS_ROOT
-          mkdir -p $TRAVIS_ROOT
           ls -lart
-          sh ./travis/install-autotools.sh $TRAVIS_ROOT
+          sh ./travis/install-autotools.sh $GITHUB_WORKSPACE/travis
       - name: install
         run: |
           export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
-          ./travis/install-mpi.sh $TRAVIS_ROOT $MPI_IMPL
-          if [[ "$PORT" == "ofi" ]]; then ./travis/install-libfabric.sh $TRAVIS_ROOT; else true;  fi
-          if [[ "$PORT" == "armci" ]]; then ./travis/install-armci-mpi.sh $TRAVIS_ROOT; else true; fi
+          ./travis/install-mpi.sh $CI_ROOT $MPI_IMPL
+          if [[ "$PORT" == "ofi" ]]; then ./travis/install-libfabric.sh $CI_ROOT; else true;  fi
+          if [[ "$PORT" == "armci" ]]; then ./travis/install-armci-mpi.sh $CI_ROOT; else true; fi
           if [[ ( "$PORT" == "mpi-pr" ) && ( $(os) == "ubuntu-16.04" ) ]]; then ./travis/install-sicm.sh $HOME/no_cache; else true; fi
       - name: compile and test global arrays
         if: ${{ success() }}
         run: |
-          export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
-          sh ./travis/build-run.sh $TRAVIS_ROOT $PORT $MPI_IMPL
+          ./travis/build-run.sh $GITHUB_WORKSPACE/travis $PORT $MPI_IMPL
       - name: after_failure
         if: ${{ failure() }}
         run: |

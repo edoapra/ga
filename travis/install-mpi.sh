@@ -63,12 +63,9 @@ EOF
 		    else
 			FFLAGS_IN="-w -O2"
 		    fi
-		    echo "000 exit code is" "$?"
                     ../configure CFLAGS="-w" FFLAGS="$FFLAGS_IN" --prefix=$TRAVIS_ROOT/mpich
                     make -j ${MAKE_JNUM}
-		    echo "111 exit code is" "$?"
                     make -j ${MAKE_JNUM} install
-		    echo "222 exit code is" "$?"
                 else
                     echo "MPICH already installed"
                 fi
