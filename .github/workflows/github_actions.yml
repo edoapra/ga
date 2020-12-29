@@ -99,6 +99,9 @@ jobs:
       - name: compile and test global arrays
         if: ${{ success() }}
         run: |
+          ls -l travis/ || true
+          ls -l travis/bin || true
+          ls -l travis/$MPI_IMPL || true
           ./travis/build-run.sh $GITHUB_WORKSPACE/travis $PORT $MPI_IMPL
       - name: after_failure
         if: ${{ failure() }}
