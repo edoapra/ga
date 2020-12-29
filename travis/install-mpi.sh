@@ -68,7 +68,7 @@ EOF
 		    else
 			CFLAGS_in="-w"
 		    fi
-                    ../configure CFLAGS="$CFLAGS_in" FFLAGS="$FFLAGS_IN" --prefix=$TRAVIS_ROOT/mpich
+                    ../configure CC="$CC" FC="$F77" F77="$F77" CFLAGS="$CFLAGS_in" FFLAGS="$FFLAGS_IN" --prefix=$TRAVIS_ROOT/mpich
                     make -j ${MAKE_JNUM}
                     make -j ${MAKE_JNUM} install
                 else
@@ -86,7 +86,7 @@ EOF
 		    else
 			CFLAGS_in="-w"
 		    fi
-                    ../configure CFLAGS="$CFLAGS_in" --prefix=$TRAVIS_ROOT/open-mpi \
+                    ../configure CC="$CC" FC="$F77" F77="$F77" CFLAGS="$CFLAGS_in" --prefix=$TRAVIS_ROOT/open-mpi \
                                 --without-verbs --without-fca --without-mxm --without-ucx \
                                 --without-portals4 --without-psm --without-psm2 \
                                 --without-libfabric --without-usnic \
