@@ -88,7 +88,6 @@ jobs:
           ls -lart
           sh ./travis/install-autotools.sh $GITHUB_WORKSPACE/travis
       - name: install
-        if: " steps.ga-cache-install.outputs.cache-hit != 'true' && ${{ matrix.os }} != 'macos-10.15' "
         run: |
           export CI_ROOT=$GITHUB_WORKSPACE/travis
           ./travis/install-mpi.sh $CI_ROOT $MPI_IMPL
