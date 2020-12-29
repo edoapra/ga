@@ -71,7 +71,7 @@ EOF
                 fi
                 ;;
             openmpi)
-                if [ ! -d "$TRAVIS_ROOT/open-mpi" ] || [ ! -x "$1/bin/mpicc3" ]; then
+                if  [[ ! -x "$1/bin/mpicc3" ] || [[ ! -d "$TRAVIS_ROOT/open-mpi" ]] ; then
                     wget --no-check-certificate https://www.open-mpi.org/software/ompi/v2.0/downloads/openmpi-2.0.2.tar.bz2
                     tar -xjf openmpi-2.0.2.tar.bz2
                     cd openmpi-2.0.2
