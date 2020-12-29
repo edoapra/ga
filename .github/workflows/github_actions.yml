@@ -78,7 +78,7 @@ jobs:
           sh ./travis/install-autotools.sh $GITHUB_WORKSPACE/travis
       - name: install
         run: |
-          export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
+          export CI_ROOT=$GITHUB_WORKSPACE/travis
           ./travis/install-mpi.sh $CI_ROOT $MPI_IMPL
           if [[ "$PORT" == "ofi" ]]; then ./travis/install-libfabric.sh $CI_ROOT; else true;  fi
           if [[ "$PORT" == "armci" ]]; then ./travis/install-armci-mpi.sh $CI_ROOT; else true; fi
