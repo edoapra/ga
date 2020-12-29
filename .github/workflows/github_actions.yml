@@ -70,7 +70,6 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.mpi_impl}}-${{ matrix.armci_network}}-gabuild
 
       - name: install_packages
-        if: steps.ga-cache-install.outputs.cache-hit != 'true'
         run: |
           case "${{ matrix.os }}" in
           ubuntu*|jessie|stretch|buster)
@@ -89,7 +88,7 @@ jobs:
           ls -lart
           sh ./travis/install-autotools.sh $GITHUB_WORKSPACE/travis
       - name: install
-        if: steps.ga-cache-install.outputs.cache-hit != 'true'
+        if: " steps.ga-cache-install.outputs.cache-hit != 'true' && ${{ matrix.os }} != 'macos-10.15' "
         run: |
           export CI_ROOT=$GITHUB_WORKSPACE/travis
           ./travis/install-mpi.sh $CI_ROOT $MPI_IMPL
@@ -99,9 +98,6 @@ jobs:
       - name: compile and test global arrays
         if: ${{ success() }}
         run: |
-          ls -l travis/ || true
-          ls -l travis/bin || true
-          ls -l travis/$MPI_IMPL || true
           ./travis/build-run.sh $GITHUB_WORKSPACE/travis $PORT $MPI_IMPL
       - name: after_failure
         if: ${{ failure() }}
