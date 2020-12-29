@@ -21,24 +21,30 @@ jobs:
           - mpi-pr
         f77:
           - gfortran-9
+        cc:
+          - clang
+          - gcc-9
         include:
           - os: ubuntu-16.04
             experimental: true 
             mpi_impl: mpich
             armci_network: mpi-pr
             f77: gfortran
+            cc: gcc
           - os: ubuntu-20.04
             experimental: true 
             mpi_impl: mpich
             armci_network: mpi-ts
             config_opts: "--disable-f77 --enable-cxx"
             f77: gfortran-10
+            cc: gcc-10
           - os: macos-10.15
             experimental: true 
             mpi_impl: mpich
             armci_network: mpi-ts
             config_opts: "--disable-static --enable-shared"
             f77: gfortran-10
+            cc: clang
         exclude:
           - armci_network: mpi-pr
             mpi_impl: openmpi
@@ -52,6 +58,7 @@ jobs:
         PORT: ${{ matrix.armci_network }}
         ARMCI_NETWORK: ${{ matrix.armci_network }}
         F77: ${{ matrix.f77 }}
+        CC: ${{ matrix.cc }}
         CONFIG_OPTS: ${{ matrix.config_opts}}
     continue-on-error: ${{ matrix.experimental }}
     steps: 
@@ -67,7 +74,7 @@ jobs:
         with:
           # cache files are stored in `~/apps` on Linux/macOS
           path: apps
-          key: ${{ runner.os }}-${{ matrix.mpi_impl}}-${{ matrix.armci_network}}-${{ matrix.f77 }}-${{ matrix.config_opts}}-ga-apps
+          key: ${{ runner.os }}-${{ matrix.mpi_impl}}-${{ matrix.armci_network}}-${{ matrix.cc }}-${{ matrix.f77 }}-${{ matrix.config_opts}}-ga-apps
 
       - name: install_packages
         run: |
