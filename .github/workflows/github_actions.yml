@@ -90,9 +90,6 @@ jobs:
         if: ${{ success() }}
         run: |
           export TRAVIS_ROOT=$GITHUB_WORKSPACE/travis
-          ls -lrt 
-          if [[ ( "MPI_IMPL" == "openmpi" ) && ( $(uname) == "Linux" ) ]]; then ls -lrt open-mpi/bin ; fi
-          if [[ ( "MPI_IMPL" == "mpich" ) && ( $(uname) == "Linux" ) ]]; then ls -lrt mpich/bin ; fi
           sh ./travis/build-run.sh $TRAVIS_ROOT $PORT $MPI_IMPL
       - name: after_failure
         if: ${{ failure() }}
