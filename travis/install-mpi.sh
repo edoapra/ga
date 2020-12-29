@@ -63,7 +63,12 @@ EOF
 		    else
 			FFLAGS_IN="-w -O2"
 		    fi
-                    ../configure CFLAGS="-w" FFLAGS="$FFLAGS_IN" --prefix=$TRAVIS_ROOT/mpich
+		    if [ $(${CC} -dM -E - </dev/null 2> /dev/null |grep __clang__|head -1|cut -c19) ] ; then
+			CFLAGS_in="-w -fPIC"
+		    else	      
+			CFLAGS_in="-w"
+		    fi
+                    ../configure CFLAGS="$CFLAGS_in" FFLAGS="$FFLAGS_IN" --prefix=$TRAVIS_ROOT/mpich
                     make -j ${MAKE_JNUM}
                     make -j ${MAKE_JNUM} install
                 else
