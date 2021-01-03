@@ -33,11 +33,10 @@ static void dpatch_test(
         int bkpos, int bnpos,
         int cmpos, int cnpos);
 static void dpatch_test2();
-
 #if HAVE_BLAS
-extern void dgemm_(char *, char *, int *, int *, int *, double *, double *, int *, double *, int *, double *, double *, int *);
+extern void dgemm_(char *, char *, int *, int *, int *, double *, const double *, int *, const double *, int *, double *, double *, int *);
 #else
-extern void xb_dgemm(char *, char *, int *, int *, int *, double *, double *, int *, double *, int *, double *, double *, int *);
+extern void xb_dgemm(char *, char *, int *, int *, int *, double *, const double *, int *, const double *, int *, double *, double *, int *);
 #endif
 
 int main(int argc, char **argv)
