@@ -85,7 +85,7 @@ jobs:
           ;;
           macos*)
           brew update
-          brew install gcc coreutils automake
+          brew install gcc coreutils automake || true
           ;;
           esac
       - name: before_install
@@ -113,9 +113,3 @@ jobs:
           ls
           find . -name config.log -exec cat {} ";"
           cat ./test-suite.log
-          mkdir -p apps/bin
-          echo abc123 > apps/bin/empty_file
-
-
-
-     
