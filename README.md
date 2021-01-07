@@ -428,14 +428,13 @@ The CMake build only supports the MPI-based runtimes so GA can only be built usi
 * `GCCROOT` Specify root of GCC installation. Only required when building with Clang compilers.
 * `ENABLE_BLAS` Use an external BLAS library. [Default:OFF]
   * Only `IntelMKL`, `IBMESSL`, `BLIS`, `ReferenceBLAS`(Netlib) are supported.
-  * Need to provide the following env or cmake variables when building GA when ENABLE_BLAS=ON
-    * `BLAS_VENDOR`: Should be one of `IntelMKL`, `IBMESSL`, `BLIS`, `ReferenceBLAS`(Netlib) [Default: `BLIS`]
-    * Based on the `BLAS_VENDOR` chosen, the following environment/cmake variables should be specified accordingly
-        `MKLROOT`, `ESSLROOT`, `BLISROOT`, `ReferenceBLASROOT`. `ReferenceLAPACKROOT` needs to be set for all cases except `IntelMKL`.
-    * Note that it would work to set the above variables as either an enviroment variable or a CMake option.
-    * `LINALG_THREAD_LAYER` Options are `openmp` (default), `sequential` for `IntelMKL` and `smp` (default) for `IBMESSL`. Does not apply to other BLAS libraries.
-    * `LINALG_REQUIRED_COMPONENTS` Options are `lp64` (default) and `ilp64`.
-    * `ENABLE_SCALAPACK` Need to set `ReferenceScaLAPACKROOT` (`lp64` only) unless using `BLAS_VENDOR=IntelMKL`.
+  * Need to provide the following cmake options if ENABLE_BLAS=ON
+    * `LINALG_VENDOR`: Should be one of `IntelMKL`, `IBMESSL`, `BLIS`, `ReferenceBLAS`(Netlib) [Default: `BLIS`]
+    * `LINALG_PREFIX`: Specify root of the LinAlg libraries installation. If the various libraries are in different locations, one needs to set
+     `BLAS_PREFIX`, `LAPACK_PREFIX`, `SCALAPACK_PREFIX` individually. These three options are set to the `LINALG_PREFIX` provided by default unless explicitly set otherwise.
+    * `LINALG_THREAD_LAYER`: Options are `openmp` (default), `sequential` for `IntelMKL` and `smp` (default) for `IBMESSL`. Does not apply to other BLAS libraries.
+    * `LINALG_REQUIRED_COMPONENTS`: Options are `lp64` or `ilp64` and `sycl`. [Default:lp64]
+    * `ENABLE_SCALAPACK`: To enable ScaLAPACK discovery.
 #### The following options are standard CMake parameters. More information about them can be found in the CMake documentation.
 
 * `CMAKE_INSTALL_PREFIX` Specify the install location for GA.
@@ -458,7 +457,7 @@ The CMake build only supports the MPI-based runtimes so GA can only be built usi
     ```
     CC=gcc CXX=g++ FC=gfortran cmake -DCMAKE_INSTALL_PREFIX=$HOME/ga_install \ 
     -DGA_RUNTIME=MPI_PROGRESS_RANK \
-    -DENABLE_BLAS=ON -DBLAS_VENDOR=IntelMKL -DMKLROOT=/path/to/mkl \
+    -DENABLE_BLAS=ON -DLINALG_VENDOR=IntelMKL -DLINALG_PREFIX=/opt/intel/mkl \
     -DENABLE_TESTS=ON -DENABLE_FORTRAN=ON -DENABLE_PROFILING=OFF  
     ```
 

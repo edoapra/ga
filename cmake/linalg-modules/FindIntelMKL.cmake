@@ -80,7 +80,7 @@ if( NOT IntelMKL_MPI_LIBRARY )
 endif()
 
 if( NOT IntelMKL_PREFIX )
-  set( IntelMKL_PREFIX ${MKLROOT} $ENV{MKLROOT} )
+  set( IntelMKL_PREFIX $ENV{MKLROOT} )
 endif()
 
 
@@ -254,7 +254,7 @@ else()
 endif()
 
 # SYCL
-if(ENABLE_DPCPP)
+if( "sycl" IN_LIST IntelMKL_FIND_COMPONENTS )
   find_library( IntelMKL_SYCL_LIBRARY
     NAMES ${IntelMKL_SYCL_LIBRARY_NAME}
     HINTS ${IntelMKL_PREFIX}
@@ -315,6 +315,7 @@ if( "ilp64" IN_LIST IntelMKL_FIND_COMPONENTS )
     set( IntelMKL_Fortran_COMPILE_FLAGS "-i8" )
   endif()
   set( IntelMKL_LIBRARY ${IntelMKL_ILP64_LIBRARY} )
+  set( IntelMKL_COMPILE_OPTIONS ${IntelMKL_C_COMPILE_FLAGS} )
 
   if( IntelMKL_ILP64_BLACS_LIBRARY )
     set( IntelMKL_BLACS_LIBRARY ${IntelMKL_ILP64_BLACS_LIBRARY} )
@@ -340,7 +341,9 @@ else()
   endif()
 endif()
 
-
+if( IntelMKL_SYCL_LIBRARY )
+  set( IntelMKL_sycl_FOUND TRUE )
+endif()
 
 
 
@@ -359,8 +362,8 @@ if( IntelMKL_LIBRARY AND IntelMKL_THREAD_LIBRARY AND IntelMKL_CORE_LIBRARY )
        ${IntelMKL_THREAD_LIBRARY} 
        ${IntelMKL_CORE_LIBRARY} )
 
-  if(ENABLE_DPCPP)
-    list( APPEND  IntelMKL_BLAS_LAPACK_LIBRARIES ${IntelMKL_SYCL_LIBRARY} )
+  if( "sycl" IN_LIST IntelMKL_FIND_COMPONENTS )
+    list( APPEND IntelMKL_BLAS_LAPACK_LIBRARIES ${IntelMKL_SYCL_LIBRARY} )
   endif()
 
   if( "blacs" IN_LIST IntelMKL_FIND_COMPONENTS )

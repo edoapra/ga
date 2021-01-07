@@ -51,7 +51,7 @@ if (ENABLE_FORTRAN)
 endif()
 
 ga_option(CMAKE_BUILD_TYPE Release)
-ga_option(BLAS_VENDOR BLIS)
+ga_option(LINALG_VENDOR BLIS)
 ga_option(ENABLE_TESTS ON)
 ga_option(ENABLE_PROFILING OFF)
 #Options for user provided LinAlg libraries
@@ -438,16 +438,7 @@ install(FILES
 )
 
 if(ENABLE_BLAS)
-  install(FILES
-    ${CMAKE_CURRENT_LIST_DIR}/cmake/FindStandardFortran.cmake
-    DESTINATION ${INSTALL_CONFIGDIR}
-  )
-
-  install(DIRECTORY
-    ${CMAKE_CURRENT_LIST_DIR}/cmake/linalg-modules
-    DESTINATION ${INSTALL_CONFIGDIR}
-  )
-
+  install_linalg_modules (INSTALL_CONFIGDIR)
   if(ENABLE_DPCPP)
     install(FILES
       ${CMAKE_CURRENT_LIST_DIR}/cmake/FindIntelSYCL.cmake

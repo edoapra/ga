@@ -11,10 +11,6 @@ else()
   set( ReferenceLAPACK_ILP64_LIBRARY_NAME "lapack64" )
 endif()
 
-if( NOT ReferenceLAPACK_PREFIX )
-  set( ReferenceLAPACK_PREFIX ${ReferenceLAPACKROOT} $ENV{ReferenceLAPACKROOT} )
-endif()
-
 find_library( ReferenceLAPACK_LP64_LIBRARIES
   NAMES ${ReferenceLAPACK_LP64_LIBRARY_NAME}
   HINTS ${ReferenceLAPACK_PREFIX}
@@ -49,13 +45,6 @@ if( "ilp64" IN_LIST ReferenceLAPACK_FIND_COMPONENTS )
 else()
   set( ReferenceLAPACK_LIBRARIES ${ReferenceLAPACK_LP64_LIBRARIES} )
 endif()
-
-find_package(StandardFortran REQUIRED)
-
-if( STANDARDFORTRAN_LIBRARIES )
-  set( ReferenceLAPACK_LIBRARIES ${ReferenceLAPACK_LIBRARIES} ${STANDARDFORTRAN_LIBRARIES} )
-endif()
-
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args( ReferenceLAPACK
