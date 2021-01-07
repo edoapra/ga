@@ -71,6 +71,10 @@ case "$os" in
         ;;
 esac
 if [ "$USE_CMAKE" = "Y" ] ; then
+    which mpif90 || true
+    mpif90 -show || true
+    which mpif77 || true
+    mpif77 -show || true
     mkdir build
     cd build
     CC=gcc CXX=g++ FC=gfortran cmake -DMPIEXEC_MAX_NUMPROCS=5 -DGA_RUNTIME=MPI_PROGRESS_RANK ../
