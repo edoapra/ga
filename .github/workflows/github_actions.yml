@@ -57,8 +57,8 @@ jobs:
             use_cmake: "Y"
             mpi_impl: openmpi
             armci_network: mpi-pr
-            f77: gfortran-10
-            cc: gcc-10
+            f77: gfortran
+            cc: gcc
         exclude:
           - armci_network: mpi-pr
             mpi_impl: openmpi
