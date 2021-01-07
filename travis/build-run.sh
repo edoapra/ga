@@ -7,8 +7,6 @@ TRAVIS_ROOT="$1"
 PORT="$2"
 MPI_IMPL="$3"
 USE_CMAKE="$4"
-echo USE_CMAKE is "$USE_CMAKE"
-#env|grep CMA
 
 # Environment variables
 export CFLAGS="-std=c99"
@@ -71,15 +69,29 @@ case "$os" in
         ;;
 esac
 if [ "$USE_CMAKE" = "Y" ] ; then
-    which mpicc || true
-    mpicc -show || true
-    which mpif90 || true
-    mpif90 -show || true
-    which mpif77 || true
-    mpif77 -show || true
-    mkdir build
+case "x$PORT" in
+    xmpi-ts)
+        ga_rt="MPI_2SIDED"
+        ;;
+    xmpi-pr)
+        ga_rt="MPI_PROGRESS_RANK"
+        ;;
+    xmpi-pt)
+        ga_rt="MPI_PROGRESS_THREAD"
+        ;;
+    xmpi-mt)
+        ga_rt="MPI_MULTITHREADED"
+        ;;
+    x)
+        ga_rt="MPI_2SIDED"
+        ;;
+    x*)
+	echo PORT = "$PORT" not recognized
+	exit 1
+        ;;
+esac
     cd build
-     cmake -DMPIEXEC_MAX_NUMPROCS=5 -DGA_RUNTIME=MPI_PROGRESS_RANK ../
+    cmake -DMPIEXEC_MAX_NUMPROCS=5 -DGA_RUNTIME="$ga_rt" ../
 else
 case "x$PORT" in
     xofi)
