@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # Exit on error
-#set -ev
+set -ev
 os=`uname`
 TRAVIS_ROOT="$1"
 PORT="$2"
@@ -54,7 +54,7 @@ case "$MPI_IMPL" in
 esac
 
 # Configure and build
-if [ "$USE_CMAKE" == "Y" ] ; then
+if [ "$USE_CMAKE" = "Y" ] ; then
     echo 'nothing to do here for cmake '
 else
     ./autogen.sh $TRAVIS_ROOT
