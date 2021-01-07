@@ -70,7 +70,7 @@ case "$os" in
         echo "Linux CFLAGS" $CFLAGS
         ;;
 esac
-if [ "$USE_CMAKE" == "Y" ] ; then
+if [ "$USE_CMAKE" = "Y" ] ; then
     mkdir build
     cd build
     CC=gcc CXX=g++ FC=gfortran cmake -DMPIEXEC_MAX_NUMPROCS=5 -DGA_RUNTIME=MPI_PROGRESS_RANK ../
@@ -78,7 +78,7 @@ else
 case "x$PORT" in
     xofi)
         ./configure --with-ofi=$TRAVIS_ROOT/libfabric
-        if [ "$os" == "Darwin" ] ; then
+        if [ "$os" = "Darwin" ] ; then
             export COMEX_OFI_LIBRARY=$TRAVIS_ROOT/libfabric/lib/libfabric.dylib
         fi
         ;;
@@ -89,7 +89,7 @@ case "x$PORT" in
         ./configure ${CONFIG_OPTS}
         ;;
     xmpi-pr)
-        if [ "$os" == "Linux" ] ; then
+        if [ "$os" = "Linux" ] ; then
             export CFLAGS="-DUSE_SICM=1 -I${HOME}/no_cache/SICM/include/public ${CFLAGS}"
             export LDFLAGS="-L${HOME}/no_cache/jemalloc/lib -ljemalloc -L${HOME}/no_cache/SICM/lib -lsicm ${LDFLAGS}"
             export LD_LIBRARY_PATH="${HOME}/no_cache/SICM/lib:${HOME}/no_cache/jemalloc/lib:${LD_LIBRARY_PATH}"
@@ -106,7 +106,7 @@ fi
 make V=0 -j ${MAKE_JNUM}
 
 # build test programs
-if [ "$USE_CMAKE" == "Y" ] ; then
+if [ "$USE_CMAKE" = "Y" ] ; then
     cd global/testing
     make
     cd ../..
