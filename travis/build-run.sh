@@ -2,7 +2,7 @@
 
 # Exit on error
 set -ev
-
+env
 os=`uname`
 TRAVIS_ROOT="$1"
 PORT="$2"
