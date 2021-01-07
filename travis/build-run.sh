@@ -52,7 +52,11 @@ case "$MPI_IMPL" in
 esac
 
 # Configure and build
-./autogen.sh $TRAVIS_ROOT
+if [[ "$USE_CMAKE" == "Y" ]]; then
+    echo 'nothing to do here for cmake '
+else
+    ./autogen.sh $TRAVIS_ROOT
+fi
 case "$os" in
     Darwin)
         echo "Mac CFLAGS" $CFLAGS
@@ -64,6 +68,11 @@ case "$os" in
         echo "Linux CFLAGS" $CFLAGS
         ;;
 esac
+if [[ "$USE_CMAKE" == "Y" ]]; then
+    mkdir build
+    cd build
+    CC=gcc CXX=g++ FC=gfortran cmake -DMPIEXEC_MAX_NUMPROCS=5 -DGA_RUNTIME=MPI_PROGRESS_RANK ../
+else
 case "x$PORT" in
     xofi)
         ./configure --with-ofi=$TRAVIS_ROOT/libfabric
@@ -89,13 +98,19 @@ case "x$PORT" in
         ./configure --with-${PORT} ${CONFIG_OPTS}
         ;;
 esac
+fi
 
 # build libga
 make V=0 -j ${MAKE_JNUM}
 
 # build test programs
-make V=0 checkprogs -j ${MAKE_JNUM}
-
+if [[ "$USE_CMAKE" == "Y" ]]; then
+    cd global/testing
+    make
+    cd ../..
+else
+    make V=0 checkprogs -j ${MAKE_JNUM}
+fi
 # run one test
 MAYBE_OVERSUBSCRIBE=
 if test "x$os" = "xDarwin" && test "x$MPI_IMPL" = "xopenmpi"

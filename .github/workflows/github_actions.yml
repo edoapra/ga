@@ -45,6 +45,20 @@ jobs:
             config_opts: "--disable-static --enable-shared"
             f77: gfortran-10
             cc: clang
+          - os: macos-10.15
+            experimental: true
+            use_cmake: "Y"
+            mpi_impl: mpich
+            armci_network: mpi-pr
+            f77: gfortran-10
+            cc: clang
+          - os: ubuntu-18.04
+            experimental: true
+            use_cmake: "Y"
+            mpi_impl: openmpi
+            armci_network: mpi-pr
+            f77: gfortran-10
+            cc: gcc-10
         exclude:
           - armci_network: mpi-pr
             mpi_impl: openmpi
@@ -60,6 +74,7 @@ jobs:
         F77: ${{ matrix.f77 }}
         CC: ${{ matrix.cc }}
         CONFIG_OPTS: ${{ matrix.config_opts}}
+        USE_CMAKE: $${ matrix.use_cmake }}
     continue-on-error: ${{ matrix.experimental }}
     steps: 
       - name: Checkout code
