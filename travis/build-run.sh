@@ -90,6 +90,7 @@ case "x$PORT" in
 	exit 1
         ;;
 esac
+    mkdir -p build
     cd build
     cmake -DMPIEXEC_MAX_NUMPROCS=5 -DGA_RUNTIME="$ga_rt" ../
 else
