@@ -7,6 +7,7 @@ os=`uname`
 TRAVIS_ROOT="$1"
 PORT="$2"
 MPI_IMPL="$3"
+USE_CMAKE="$4"
 
 # Environment variables
 export CFLAGS="-std=c99"
