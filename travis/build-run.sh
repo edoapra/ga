@@ -1,13 +1,14 @@
 #! /bin/sh
 
 # Exit on error
-set -ev
-env
+#set -ev
 os=`uname`
 TRAVIS_ROOT="$1"
 PORT="$2"
 MPI_IMPL="$3"
 USE_CMAKE="$4"
+echo USE_CMAKE is "$USE_CMAKE"
+#env|grep CMA
 
 # Environment variables
 export CFLAGS="-std=c99"
@@ -77,7 +78,7 @@ else
 case "x$PORT" in
     xofi)
         ./configure --with-ofi=$TRAVIS_ROOT/libfabric
-        if [[ "$os" == "Darwin" ] ; then
+        if [ "$os" == "Darwin" ] ; then
             export COMEX_OFI_LIBRARY=$TRAVIS_ROOT/libfabric/lib/libfabric.dylib
         fi
         ;;
@@ -88,7 +89,7 @@ case "x$PORT" in
         ./configure ${CONFIG_OPTS}
         ;;
     xmpi-pr)
-        if [[ "$os" == "Linux" ] ; then
+        if [ "$os" == "Linux" ] ; then
             export CFLAGS="-DUSE_SICM=1 -I${HOME}/no_cache/SICM/include/public ${CFLAGS}"
             export LDFLAGS="-L${HOME}/no_cache/jemalloc/lib -ljemalloc -L${HOME}/no_cache/SICM/lib -lsicm ${LDFLAGS}"
             export LD_LIBRARY_PATH="${HOME}/no_cache/SICM/lib:${HOME}/no_cache/jemalloc/lib:${LD_LIBRARY_PATH}"
