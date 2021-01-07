@@ -74,7 +74,7 @@ jobs:
         F77: ${{ matrix.f77 }}
         CC: ${{ matrix.cc }}
         CONFIG_OPTS: ${{ matrix.config_opts}}
-        USE_CMAKE: $${ matrix.use_cmake }}
+        USE_CMAKE: ${ matrix.use_cmake }}
     continue-on-error: ${{ matrix.experimental }}
     steps: 
       - name: Checkout code
