@@ -20,11 +20,14 @@ case "$MPI_IMPL" in
             tar -xzf mpich-3.4.1.tar.gz
             cd mpich-3.4.1
             mkdir -p build && cd build
-	    GNUMAJOR=`$F77 -dM -E - < /dev/null 2> /dev/null | grep __GNUC__ |cut -c18-`
+	    GNUMAJOR=`$F77 -dM -E - < /dev/null 2> /dev/null | grep __GNUC__ |cut -c18-`	
+	    GFORTRAN_EXTRA=$(echo $F77 | cut -c 1-8)
+	    if [ "$GFORTRAN_EXTRA" = "gfortran" ]; then
 	    if [ $GNUMAJOR -ge 10  ]; then
 		FFLAGS_IN="-w -fallow-argument-mismatch -O2"
 	    else
 		FFLAGS_IN="-w -O2"
+	    fi
 	    fi
 	    if [ $(${CC} -dM -E - </dev/null 2> /dev/null |grep __clang__|head -1|cut -c19) ] ; then
 		CFLAGS_in="-w -fPIC"
