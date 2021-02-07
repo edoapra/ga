@@ -2,8 +2,8 @@
 #!/bin/bash
 mkdir -p ~/mntdmg || true
 cd ~/Downloads
-#curl -LJO https://registrationcenter-download.intel.com/akdlm/irc_nas/17426/m_BaseKit_p_2021.1.0.2427_offline.dmg
-#curl -LJO https://registrationcenter-download.intel.com/akdlm/irc_nas/17398/m_HPCKit_p_2021.1.0.2681_offline.dmg
+curl -LJO https://registrationcenter-download.intel.com/akdlm/irc_nas/17426/m_BaseKit_p_2021.1.0.2427_offline.dmg
+curl -LJO https://registrationcenter-download.intel.com/akdlm/irc_nas/17398/m_HPCKit_p_2021.1.0.2681_offline.dmg
 ls -lrt
 #
 echo "installing BaseKit"
