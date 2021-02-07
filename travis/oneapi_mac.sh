@@ -22,3 +22,6 @@ hdiutil detach ~/mntdmg
 df
 ls -lrt /opt ||true
 ls -lrt /opt/intel/oneapi ||true
+source /opt/intel/oneapi/setvars.sh || true
+ifort -V || true
+icc -V || true
