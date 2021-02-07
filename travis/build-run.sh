@@ -20,15 +20,7 @@ MAKE_JNUM=4
 # Capture details of build
 case "$MPI_IMPL" in
     mpich)
-        case "$os" in
-            Darwin)
-                echo "Mac"
-            ;;
-            Linux)
-                echo "Linux"
-                export PATH=$TRAVIS_ROOT/mpich/bin:$PATH
-            ;;
-        esac
+        export PATH=$TRAVIS_ROOT/mpich/bin:$PATH
         mpichversion
         mpicc -show
         ;;
