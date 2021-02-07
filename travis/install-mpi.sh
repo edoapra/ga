@@ -16,24 +16,9 @@ export PATH=$TRAVIS_ROOT/bin:$PATH
 case "$MPI_IMPL" in
     mpich)
         if [ ! -d "$TRAVIS_ROOT/mpich" ] || [  ! -x "$TRAVIS_ROOT/mpich/bin/mpicc" ]; then
-            wget --no-check-certificate http://www.mpich.org/static/downloads/3.2/mpich-3.2.tar.gz
-            tar -xzf mpich-3.2.tar.gz
-            cd mpich-3.2
-	    cat > mpiimpl.h.patch <<EOF
---- src/include/mpiimpl.h	2017-09-12 11:31:22.104653843 -0700
-+++ src/include/mpiimpl.h.new	2017-09-12 11:30:29.696274605 -0700
-@@ -1528,7 +1528,8 @@
- #ifdef MPID_DEV_REQUEST_DECL
-     MPID_DEV_REQUEST_DECL
- #endif
--} MPID_Request ATTRIBUTE((__aligned__(32)));
-+} ATTRIBUTE((__aligned__(32))) MPID_Request;
-+/*} MPID_Request ATTRIBUTE((__aligned__(32)));*/
-
- extern MPIU_Object_alloc_t MPID_Request_mem;
- /* Preallocated request objects */
-EOF
-            patch -p0 < mpiimpl.h.patch
+            wget --no-check-certificate http://www.mpich.org/static/downloads/3.4.1/mpich-3.4.1.tar.gz
+            tar -xzf mpich-3.4.1.tar.gz
+            cd mpich-3.4.1
             mkdir -p build && cd build
 	    GNUMAJOR=`$F77 -dM -E - < /dev/null 2> /dev/null | grep __GNUC__ |cut -c18-`
 	    if [ $GNUMAJOR -ge 10  ]; then
