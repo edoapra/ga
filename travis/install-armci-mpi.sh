@@ -15,8 +15,8 @@ case "$MPI_IMPL" in
 	if [ "$os" = "Linux" ] ; then
 	    $TRAVIS_ROOT/open-mpi/bin/mpicc --showme:command
 	    export MPICC=$TRAVIS_ROOT/open-mpi/bin/mpicc
-	    ;;
 	fi
+	;;
 esac
 
 if [ ! -z "${MPICC}" ] ; then
