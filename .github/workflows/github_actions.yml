@@ -120,7 +120,7 @@ jobs:
           path: |
             apps
             /opt/intel
-          key: ${{ runner.os }}-${{ matrix.mpi_impl}}-${{ matrix.armci_network}}-${{ matrix.cc }}-${{ matrix.f77 }}-${{ matrix.config_opts}}-ga-apps-v001
+          key: ${{ runner.os }}-${{ matrix.mpi_impl}}-${{ matrix.armci_network}}-${{ matrix.cc }}-${{ matrix.f77 }}-${{ matrix.config_opts}}-ga-apps-v002
 
       - name: install_packages
         run: |
