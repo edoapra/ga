@@ -86,8 +86,11 @@ case "$MPI_IMPL" in
 		;;
 	esac
 	;;
+    intel)
+        ./install-intel.sh
+	;;
     *)
-      echo "Unknown MPI implementation: $MPI_IMPL"
-      exit 10
-      ;;
+	echo "Unknown MPI implementation: $MPI_IMPL"
+	exit 10
+	;;
 esac
