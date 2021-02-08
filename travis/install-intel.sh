@@ -24,5 +24,5 @@ case "$os" in
 	    && sudo apt-get update \
 	    && sudo apt-get -y install intel-oneapi-ifort intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic  intel-oneapi-mkl \
 	    && sudo apt-get -y install intel-oneapi-mpi-devel
-
+	source /opt/intel/oneapi/setvars.sh --force || true
 esac
