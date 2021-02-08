@@ -23,5 +23,10 @@ df
 ls -lrt /opt ||true
 ls -lrt /opt/intel/oneapi ||true
 source /opt/intel/oneapi/setvars.sh || true
+# get user ownership of /opt/intel to keep caching happy
+my_gr=`id -g`
+my_id=`id -u`
+sudo chown -R $my_id /opt/intel
+sudo chgrp -R $my_gr /opt/intel
 ifort -V || true
 icc -V || true
