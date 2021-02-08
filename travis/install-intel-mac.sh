@@ -9,8 +9,20 @@ ls -lrt
 echo "installing BaseKit"
 hdiutil attach m_BaseKit_p_2021.1.0.2427_offline.dmg  -mountpoint ~/mntdmg -nobrowse
 df 
-sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli \
-     --eula accept --components default --action install
+#sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli \
+#     --eula accept --components default --action install
+sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli  --eula accept \
+ --action install --components custom:\
+intel.oneapi.mac.basekit.getting_started:\
+intel.oneapi.mac.oneapi-common.vars:\
+intel.oneapi.mac.oneapi-common.licensing:\
+intel.oneapi.mac.dev-utilities:\
+intel.oneapi.mac.tbb.runtime:\
+intel.oneapi.mac.openmp:\
+intel.oneapi.mac.mkl.runtime:\
+intel.oneapi.mac.mkl.devel:\
+intel.oneapi.mac.ipp.runtime:\
+intel.oneapi.mac.basekit.product
 sudo cat /opt/intel/oneapi/logs/* || true
 hdiutil detach ~/mntdmg
 sudo du -sh /opt/intel
@@ -18,8 +30,20 @@ sudo du -sh /opt/intel
 echo "installing HPCKit"
 hdiutil attach m_HPCKit_p_2021.1.0.2681_offline.dmg  -mountpoint ~/mntdmg -nobrowse
 df
-sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli \
- --eula accept --components default --action install
+#sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli \
+# --eula accept --components default --action install
+sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli  --eula accept \
+ --action install --components custom:\
+intel.oneapi.mac.hpckit.getting_started:\
+intel.oneapi.mac.oneapi-common.vars:\
+intel.oneapi.mac.oneapi-common.licensing:\
+intel.oneapi.mac.openmp:\
+intel.oneapi.mac.compilers-common:\
+intel.oneapi.mac.tbb.runtime:\
+intel.oneapi.mac.cpp-compiler:\
+intel.oneapi.mac.ifort-compiler:\
+intel.oneapi.mac.dev-utilities:\
+intel.oneapi.mac.hpckit.product
 sudo cat /opt/intel/oneapi/logs/* || true
 hdiutil detach ~/mntdmg
 df
