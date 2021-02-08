@@ -41,6 +41,9 @@ case "$MPI_IMPL" in
         #ompi_info --arch --config
         mpicc --showme:command
         ;;
+    intel)
+	source /opt/intel/oneapi/setvars.sh --force || true
+	;;
 esac
 
 # Configure and build
