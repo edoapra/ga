@@ -10,14 +10,17 @@ echo "installing BaseKit"
 hdiutil attach m_BaseKit_p_2021.1.0.2427_offline.dmg  -mountpoint ~/mntdmg -nobrowse
 df 
 sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli \
- --eula accept --components all --action install
+     --eula accept --components default --action install
+sudo cat /opt/intel/oneapi/logs/* || true
 hdiutil detach ~/mntdmg
+sudo du -sh /opt/intel
 #
 echo "installing HPCKit"
 hdiutil attach m_HPCKit_p_2021.1.0.2681_offline.dmg  -mountpoint ~/mntdmg -nobrowse
 df
 sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli \
- --eula accept --components all --action install
+ --eula accept --components default --action install
+sudo cat /opt/intel/oneapi/logs/* || true
 hdiutil detach ~/mntdmg
 df
 ls -lrt /opt ||true
