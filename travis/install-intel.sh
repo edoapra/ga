@@ -15,9 +15,6 @@ case "$os" in
         echo "Mac not read yet"
         exit 10
         ;;
-        esac
-    ;;
-
     Linux)
 	export APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 	wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
