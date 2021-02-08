@@ -103,7 +103,7 @@ case "x$PORT" in
         ./configure ${CONFIG_OPTS}
         ;;
     xmpi-pr)
-        if [[ "$os" = "Linux" ]] ; then
+        if [[ "$USE_SICM" = "Y" ]] ; then
             export CFLAGS="-DUSE_SICM=1 -I${HOME}/no_cache/SICM/include/public ${CFLAGS}"
             export LDFLAGS="-L${HOME}/no_cache/jemalloc/lib -ljemalloc -L${HOME}/no_cache/SICM/lib -lsicm ${LDFLAGS}"
             export LD_LIBRARY_PATH="${HOME}/no_cache/SICM/lib:${HOME}/no_cache/jemalloc/lib:${LD_LIBRARY_PATH}"
