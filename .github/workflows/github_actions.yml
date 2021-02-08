@@ -109,8 +109,10 @@ jobs:
           cache-name: cache-install-steps
         with:
           # cache files are stored in `~/apps` on Linux/macOS
-          path: apps
-          key: ${{ runner.os }}-${{ matrix.mpi_impl}}-${{ matrix.armci_network}}-${{ matrix.cc }}-${{ matrix.f77 }}-${{ matrix.config_opts}}-ga-apps
+          path: |
+            apps
+            /opt/intel
+          key: ${{ runner.os }}-${{ matrix.mpi_impl}}-${{ matrix.armci_network}}-${{ matrix.cc }}-${{ matrix.f77 }}-${{ matrix.config_opts}}-ga-apps-v001
 
       - name: install_packages
         run: |
