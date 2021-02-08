@@ -87,7 +87,7 @@ case "$MPI_IMPL" in
 	esac
 	;;
     intel)
-        ./install-intel.sh
+        ./travis/install-intel.sh
 	;;
     *)
 	echo "Unknown MPI implementation: $MPI_IMPL"
