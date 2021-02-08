@@ -80,6 +80,12 @@ jobs:
             armci_network: mpi-ts
             f77: gfortran
             cc: gcc
+          - os: ubuntu-20.04
+            experimental: true
+            mpi_impl: intel
+            armci_network: mpi-ts
+            f77: ifort
+            cc: gcc
         exclude:
           - armci_network: mpi-pr
             mpi_impl: openmpi
@@ -124,7 +130,7 @@ jobs:
           macos*)
           brew update
           brew install gcc coreutils automake || true
-          if [[ "$FC" == "ifort" ]] || [[ "$CC" == "icc" ]] ; then ./travis/oneapi_mac.sh; else true;  fi
+          if [[ "$FC" == "ifort" ]] || [[ "$CC" == "icc" ]] ; then ./travis/install-intel-mac.sh; else true;  fi
           ;;
           esac
       - name: before_install
