@@ -148,7 +148,7 @@ jobs:
           ./travis/install-mpi.sh $CI_ROOT $MPI_IMPL
           if [[ "$PORT" == "ofi" ]]; then ./travis/install-libfabric.sh $CI_ROOT; else true;  fi
           if [[ "$PORT" == "armci" ]]; then ./travis/install-armci-mpi.sh $CI_ROOT; else true; fi
-          if [[ "$USE_SICM" == "y" ]]; then ./travis/install-sicm.sh $HOME/no_cache; else true; fi
+          if [[ "$USE_SICM" == "Y" ]]; then ./travis/install-sicm.sh $HOME/no_cache; else true; fi
       - name: compile and test global arrays
         if: ${{ success() }}
         run: |
