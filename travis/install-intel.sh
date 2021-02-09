@@ -8,15 +8,25 @@ set -x
 os=`uname`
 
 MAKE_JNUM=4
-if [ -f "/opt/intel/oneapi/setvars.sh" ]; then
-    echo "Intel oneapi already installed"
-    source /opt/intel/oneapi/setvars.sh --force || true
-    exit 0
-fi
-
 case "$os" in
     Darwin)
-	mkdir -p ~/mntdmg || true
+	IONEAPI_ROOT=~/apps/oneapi
+	;;
+    Linux)
+	IONEAPI_ROOT=/opt/intel/oneapi
+	;;
+esac
+#echo "os oneapi root" $os $IONEAPI_ROOT
+#exit 0
+echo stev "$IONEAPI_ROOT/setvars.sh"
+if [ -f "$IONEAPI_ROOT/setvars.sh" ]; then
+    echo "Intel oneapi already installed"
+    source "$IONEAPI_ROOT"/setvars.sh --force || true
+    exit 0
+fi
+case "$os" in
+    Darwin)
+	mkdir -p ~/mntdmg ~/apps || true
 	cd ~/Downloads
 	dir_base="17426"
 	dir_hpc="17398"
@@ -27,18 +37,19 @@ case "$os" in
 	echo "installing BaseKit"
 	hdiutil attach "$base".dmg  -mountpoint ~/mntdmg -nobrowse
 	sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli  --eula accept \
-	     --action install --components default
+	     --action install --components default  --install-dir ~/apps
 	hdiutil detach ~/mntdmg
 	#
 	echo "installing HPCKit"
 	hdiutil attach "$hpc".dmg  -mountpoint ~/mntdmg -nobrowse
 	sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli  --eula accept \
-	     --action install --components default
+	     --action install --components default --install-dir ~/apps
 	hdiutil detach ~/mntdmg
-	sudo rm -rf /opt/intel/oneapi/intelpython /opt/intel/oneapi/dal /opt/intel/oneapi/advisor \
-	     /opt/intel/oneapi/ipp /opt/intel/oneapi/conda_channel 	/opt/intel/oneapi/dnnl \
-	     /opt/intel/oneapi/installer /opt/intel/oneapi/vtune_profiler /opt/intel/oneapi/tbb || true
-	source /opt/intel/oneapi/setvars.sh || true
+	ls -lrta ~/apps ||true
+	sudo rm -rf "$IONEAPI_ROOT"/intelpython "$IONEAPI_ROOT"/dal "$IONEAPI_ROOT"/advisor \
+	     "$IONEAPI_ROOT"/ipp "$IONEAPI_ROOT"/conda_channel 	"$IONEAPI_ROOT"/dnnl \
+	     "$IONEAPI_ROOT"/installer "$IONEAPI_ROOT"/vtune_profiler "$IONEAPI_ROOT"/tbb || true
+	source "$IONEAPI_ROOT"/setvars.sh || true
 	ifort -V
 	icc -V
 	# get user ownership of /opt/intel to keep caching happy
@@ -56,5 +67,5 @@ case "$os" in
 	    && sudo apt-get update \
 	    && sudo apt-get -y install intel-oneapi-ifort intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic  intel-oneapi-mkl \
 	    && sudo apt-get -y install intel-oneapi-mpi-devel
-	source /opt/intel/oneapi/setvars.sh --force || true
+	source "$IONEAPI_ROOT"/setvars.sh --force || true
 esac

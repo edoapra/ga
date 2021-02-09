@@ -29,7 +29,15 @@ case "$MPI_IMPL" in
 		    FFLAGS_IN="-w -O2"
 		fi
 	    elif [ "$F77" = "ifort" ]; then
-		source /opt/intel/oneapi/setvars.sh --force
+		case "$os" in
+		    Darwin)
+			IONEAPI_ROOT=~/apps/oneapi
+			;;
+		    Linux)
+			IONEAPI_ROOT=/opt/intel/oneapi
+			;;
+		esac
+		source "$IONEAPI_ROOT"/setvars.sh --force || true
 		ifort -V
 		icc -V
 	    fi
