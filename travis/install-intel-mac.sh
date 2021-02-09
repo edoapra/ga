@@ -22,11 +22,12 @@ sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli  --eula accept \
 hdiutil detach ~/mntdmg
 sudo rm -rf /opt/intel/oneapi/intelpython /opt/intel/oneapi/dal /opt/intel/oneapi/advisor \
      /opt/intel/oneapi/ipp /opt/intel/oneapi/conda_channel 	/opt/intel/oneapi/dnnl \
-     /opt/intel/oneapi/installer || true
+     /opt/intel/oneapi/installer /opt/intel/oneapi/vtune_profiler /opt/intel/oneapi/tbb || true
 df
 ls -lrt /opt ||true
 ls -lrt /opt/intel/oneapi ||true
 sudo du -sh /opt/intel
+sudo du -sk /opt/intel/oneapi | sort -n ||true
 source /opt/intel/oneapi/setvars.sh || true
 ifort -V
 icc -V
@@ -37,3 +38,4 @@ my_id=`id -u`
 sudo chown -R $my_id /opt/intel
 sudo chgrp -R $my_gr /opt/intel
 ls -la /opt/intel/oneapi
+sync
