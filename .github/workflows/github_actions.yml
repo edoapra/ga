@@ -132,9 +132,9 @@ jobs:
           macos*)
           brew update
           brew install gcc coreutils automake || true
-          if [[ "$FC" == "ifort" ]] || [[ "$CC" == "icc" ]] ; then ./travis/install-intel-mac.sh; else true;  fi
           ;;
           esac
+          if [[ "$FC" == "ifort" ]] || [[ "$CC" == "icc" ]] ; then ./travis/install-intel.sh; else true;  fi
       - name: before_install
         if: steps.ga-cache-install.outputs.cache-hit != 'true'
         run: |
