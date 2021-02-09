@@ -26,7 +26,7 @@ if [ -f "$IONEAPI_ROOT/setvars.sh" ]; then
 fi
 case "$os" in
     Darwin)
-	mkdir -p ~/mntdmg ~/apps || true
+	mkdir -p ~/mntdmg ~/apps/oneapi || true
 	cd ~/Downloads
 	dir_base="17426"
 	dir_hpc="17398"
@@ -37,13 +37,13 @@ case "$os" in
 	echo "installing BaseKit"
 	hdiutil attach "$base".dmg  -mountpoint ~/mntdmg -nobrowse
 	sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli  --eula accept \
-	     --action install --components default  --install-dir ~/apps
+	     --action install --components default  --install-dir ~/apps/oneapi
 	hdiutil detach ~/mntdmg
 	#
 	echo "installing HPCKit"
 	hdiutil attach "$hpc".dmg  -mountpoint ~/mntdmg -nobrowse
 	sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli  --eula accept \
-	     --action install --components default --install-dir ~/apps
+	     --action install --components default --install-dir ~/apps/oneapi
 	hdiutil detach ~/mntdmg
 	ls -lrta ~/apps ||true
 	sudo rm -rf "$IONEAPI_ROOT"/intelpython "$IONEAPI_ROOT"/dal "$IONEAPI_ROOT"/advisor \
