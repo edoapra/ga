@@ -23,7 +23,7 @@ intel.oneapi.mac.mkl.runtime:\
 intel.oneapi.mac.mkl.devel:\
 intel.oneapi.mac.ipp.runtime:\
 intel.oneapi.mac.basekit.product
-sudo cat /opt/intel/oneapi/logs/* || true
+sudo cat /opt/intel/oneapi/logs/* /private/tmp/root/intel_oneapi_installer/*/*log || true
 hdiutil detach ~/mntdmg
 sudo du -sh /opt/intel
 #
@@ -33,18 +33,8 @@ df
 #sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli \
 # --eula accept --components default --action install
 sudo ~/mntdmg/bootstrapper.app/Contents/MacOS/install.sh --cli  --eula accept \
- --action install --components custom:\
-intel.oneapi.mac.hpckit.getting_started:\
-intel.oneapi.mac.oneapi-common.vars:\
-intel.oneapi.mac.oneapi-common.licensing:\
-intel.oneapi.mac.openmp:\
-intel.oneapi.mac.compilers-common:\
-intel.oneapi.mac.tbb.runtime:\
-intel.oneapi.mac.cpp-compiler:\
-intel.oneapi.mac.ifort-compiler:\
-intel.oneapi.mac.dev-utilities:\
-intel.oneapi.mac.hpckit.product
-sudo cat /opt/intel/oneapi/logs/* || true
+ --action install --components --components default --action install
+sudo cat /opt/intel/oneapi/logs/* /private/tmp/root/intel_oneapi_installer/*/*log || true
 hdiutil detach ~/mntdmg
 df
 ls -lrt /opt ||true
@@ -55,5 +45,6 @@ my_gr=`id -g`
 my_id=`id -u`
 sudo chown -R $my_id /opt/intel
 sudo chgrp -R $my_gr /opt/intel
-ifort -V || true
-icc -V || true
+ls -Rla /opt/intel/oneapi
+ifort -V 
+icc -V 
