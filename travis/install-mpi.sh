@@ -46,7 +46,7 @@ case "$MPI_IMPL" in
 	    else
 		CFLAGS_in="-w"
 	    fi
-            ../configure CC="$CC" FC="$F77" F77="$F77" CFLAGS="$CFLAGS_in" FFLAGS="$FFLAGS_IN" --prefix=$TRAVIS_ROOT/mpich --with-device=ch3
+            ../configure CC="$CC" FC="$F77" F77="$F77" CFLAGS="$CFLAGS_in" FFLAGS="$FFLAGS_IN" --prefix=$TRAVIS_ROOT/mpich --with-device=ch3 --disable-opencl
             make -j ${MAKE_JNUM}
             make -j ${MAKE_JNUM} install
         else
