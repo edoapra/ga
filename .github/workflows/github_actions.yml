@@ -34,6 +34,12 @@ jobs:
           - gcc-9
         include:
           - os: ubuntu-latest
+            experimental: true 
+            mpi_impl: mpich
+            armci_network: mpi-ts
+            f77: gfortran-12
+            cc: gcc-12
+          - os: ubuntu-latest
             experimental: true
             mpi_impl: intel
             armci_network: sockets
