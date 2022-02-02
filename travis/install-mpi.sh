@@ -24,12 +24,6 @@ fi
 
 # this is where updated Autotools will be for Linux
 export PATH=$TRAVIS_ROOT/bin:$PATH
-if [[ "$FC" == "gfortran-12" ]] || [[ "$CC" == "gcc-12" ]]; then
-    if [ "$os" == "Linux" ]; then
-	sudo  add-apt-repository -y ppa:ubuntu-toolchain-r/test 
-	sudo  apt-get -y install gcc-12 gfortran-12 g++-12
-    fi
-fi
 
 case "$MPI_IMPL" in
     mpich)

@@ -147,6 +147,7 @@ jobs:
           ubuntu*|jessie|stretch|buster)
           sudo apt-get update -q -y
           sudo apt-get install -q -y gfortran
+          if [[ "$FC" == "gfortran-12" ]] || [[ "$CC" == "gcc-12" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get -y install gcc-12 gfortran-12 g++-12; fi
           ;;
           macos*)
           brew update
