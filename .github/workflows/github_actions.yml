@@ -67,6 +67,13 @@ jobs:
             armci_network: mpi-pr
             f77: gfortran-10
             cc: clang
+          - os: macos-10.15
+            experimental: true
+            use_cmake: "Y"
+            mpi_impl: openmpi
+            armci_network: mpi-pr
+            f77: gfortran-10
+            cc: clang
           - os: ubuntu-18.04
             experimental: true
             use_cmake: "Y"
