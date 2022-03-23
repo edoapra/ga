@@ -30,9 +30,10 @@ case "$MPI_IMPL" in
             brew install mpich || brew upgrade mpich || true
 	else
         if [ ! -d "$TRAVIS_ROOT/mpich" ] || [  ! -x "$TRAVIS_ROOT/mpich/bin/mpicc" ]; then
-            wget --no-check-certificate http://www.mpich.org/static/downloads/3.4.1/mpich-3.4.1.tar.gz
-            tar -xzf mpich-3.4.1.tar.gz
-            cd mpich-3.4.1
+            MPICH_VERSION=4.0.1
+            wget --no-check-certificate http://www.mpich.org/static/downloads/$MPICH_VERSION/mpich-$MPICH_VERSION.tar.gz
+            tar -xzf mpich-$MPICH_VERSION.tar.gz
+            cd mpich-$MPICH_VERSION
             mkdir -p build && cd build
 	    GNUMAJOR=`$F77 -dM -E - < /dev/null 2> /dev/null | grep __GNUC__ |cut -c18-`	
 	    GFORTRAN_EXTRA=$(echo $F77 | cut -c 1-8)
