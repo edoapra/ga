@@ -626,13 +626,14 @@ int comex_init()
    /* if using SYSTEM V instead of POSIX SHM, check if /dev/shm exist */
    {
      struct stat sb;
-     if (stat("/dev/shm", &sb) == 0 && S_ISDIR(sb.st_mode)) {
+     if (stat("/dev/shm/", &sb) == 0 && S_ISDIR(sb.st_mode)) {
        use_dev_shm = 1;
-     } else if (stat("/tmp", &sb) == 0 && S_ISDIR(sb.st_mode)) {
+     } else if (stat("/tmp/", &sb) == 0 && S_ISDIR(sb.st_mode)) {
        use_dev_shm = 0;
      } else {
        comex_error("No directory available for System V memory\n",-1);
      }
+     printf(" use_dev_shm %d \n", use_dev_shm);
    }
 #endif
 
@@ -768,7 +769,7 @@ int comex_finalize()
     // is_notifier = g_state.rank == smallest_rank_with_same_hostid + g_state.node_size*
     //   ((g_state.rank - smallest_rank_with_same_hostid)/g_state.node_size);
     // if (_smallest_world_rank_with_same_hostid(group_list) == g_state.rank) 
-    if(is_notifier = my_rank_to_free == g_state.rank)
+    if(is_notifier == my_rank_to_free == g_state.rank)
     {
         int my_master = -1;
         header_t *header = NULL;
@@ -1536,7 +1537,7 @@ int comex_free_local(void *ptr)
     reg_entry = reg_cache_find(g_state.rank, ptr, 0);
 
 #ifdef ENABLE_SYSV
-    shm_id = shmget(reg_entry->key,reg_entry->len,0600);
+    shm_id = shmget(reg_entry->key,reg_entry->len,(IPC_CREAT | 00600));
     shmdt(reg_entry->mapped);
     shmctl(shm_id, IPC_RMID, NULL);
     remove(file);
@@ -4592,10 +4593,16 @@ STATIC void _free_handler(header_t *header, char *payload, int proc)
             } else {
               retval = munmap(reg_entry->mapped, reg_entry->len);
             }
+#ifdef ENABLE_SYSV
+	    shm_id = shmget(reg_entry->key,reg_entry->len,(IPC_CREAT | 00600));
+	    shmdt(reg_entry->mapped);
+	    shmctl(shm_id, IPC_RMID, NULL);
+	    remove(file);
+	    retval = 0;
 #else
             retval = munmap(reg_entry->mapped, reg_entry->len);
-	    // boh?
-	    	    check_devshm(0, -(reg_entry->len));
+	    check_devshm(0, -(reg_entry->len));
+#endif		    
 #endif
             if (-1 == retval) {
                 perror("_free_handler: munmap");
@@ -4791,16 +4798,18 @@ STATIC void* _shm_create(const char *name,
   char file[SHM_NAME_SIZE+10];
   void *mapped = NULL;
   if (use_dev_shm) {
-    sprintf(file,"/dev/shm/%s\0",name);
+    sprintf(file,"/dev/shm/%s",name);
   } else {
-    sprintf(file,"/tmp/%s\0",name);
+    sprintf(file,"/tmp/%s",name);
   }
   fp = fopen(file,"w");
   fprintf(fp,"0\n");
   fclose(fp);
   *key = ftok(file,'G');
-  shm_id = shmget(*key,size,IPC_CREAT|0600);
+  printf(" key %d size %ld \n", *key, size);
+  shm_id = shmget(*key,size,(IPC_CREAT | 00600));
   if (shm_id == -1) {
+    perror("shmget");
     comex_error("_shm_create: shmget failed", shm_id);
   }
   mapped = shmat(shm_id, NULL, 0);
@@ -4924,7 +4933,7 @@ STATIC void* _shm_attach(const char *name, size_t size, key_t key)
 {
   int shm_id;
   void *mapped = NULL;
-  shm_id = shmget(key,size,0600);
+  shm_id = shmget(key,size,(IPC_CREAT | 00600));
   if (shm_id == -1) {
     comex_error("_shm_attach: shmget failed", shm_id);
   }
