@@ -51,9 +51,10 @@ case "$os" in
 	     "$IONEAPI_ROOT"/installer "$IONEAPI_ROOT"/vtune_profiler "$IONEAPI_ROOT"/tbb || true
 	$GITHUB_WORKSPACE/travis/fix_xcodebuild.sh
 	sudo cp xcodebuild "$IONEAPI_ROOT"/compiler/latest/mac/bin/intel64/.
+        ls -lrt "$IONEAPI_ROOT"/compiler/latest/mac/bin/intel64/
 	source "$IONEAPI_ROOT"/setvars.sh || true
-	ifort -V
-	icc -V
+	/usr/bin/time -p ifort -V
+	/usr/bin/time -p icc -V
 	# get user ownership of /opt/intel to keep caching happy
 	my_gr=`id -g`
 	my_id=`id -u`
