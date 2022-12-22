@@ -25,6 +25,7 @@ public Boolean ma_error_print = MA_TRUE;
 public Boolean ma_hard_fail = MA_FALSE;
 
 void (*ma_func_terminate)() = 0;
+//void ma_func_terminate();
 
 
 void MA_set_error_callback(void (*func)())

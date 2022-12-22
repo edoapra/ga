@@ -14,21 +14,9 @@
 #include "scope.h"
 
 #ifdef F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS
-public Boolean FATR f2c_alloc_get_(datatype, nelem, name, memhandle, index, namesize)
-    Integer *datatype;
-    Integer *nelem;
-    char    *name;
-    Integer *memhandle;
-    MA_AccessIndex *index;
-    int  namesize;   /* implicitly passed by FORTRAN */
+public Boolean FATR f2c_alloc_get_(Integer *datatype, Integer *nelem, char *name, Integer *memhandle, MA_AccessIndex *index,  int  namesize)
 #else /* F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS */
-public Boolean FATR f2c_alloc_get_(datatype, nelem, name, namesize, memhandle, index)
-    Integer *datatype;
-    Integer *nelem;
-    char    *name;
-    int  namesize;   /* implicitly passed by FORTRAN */
-    Integer *memhandle;
-    MA_AccessIndex *index;
+public Boolean FATR f2c_alloc_get_(Integer *datatype, Integer *nelem, char *name, int namesize, Integer *memhandle, MA_AccessIndex *index)
 #endif /* F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS */
 {
     Boolean value;
@@ -47,19 +35,9 @@ public Boolean FATR f2c_alloc_get_(datatype, nelem, name, namesize, memhandle, i
 
 
 #ifdef F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS
-public Boolean FATR f2c_allocate_heap_(datatype, nelem, name, memhandle, namesize)
-    Integer *datatype;
-    Integer *nelem;
-    char    *name;
-    Integer *memhandle;
-    int  namesize;   /* implicitly passed by FORTRAN */
+public Boolean FATR f2c_allocate_heap_(Integer *datatype, Integer *nelem, char *name, Integer *memhandle, int  namesize)
 #else /* F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS */
-public Boolean FATR f2c_allocate_heap_(datatype, nelem, name, namesize, memhandle)
-    Integer *datatype;
-    Integer *nelem;
-    char    *name;
-    int  namesize;   /* implicitly passed by FORTRAN */
-    Integer *memhandle;
+public Boolean FATR f2c_allocate_heap_(Integer *datatype, Integer *nelem, char *name, int  namesize, Integer *memhandle)
 #endif /* F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS */
 {
     char buf[MA_NAMESIZE];
@@ -71,31 +49,25 @@ public Boolean FATR f2c_allocate_heap_(datatype, nelem, name, namesize, memhandl
 }
 
 
-public Boolean FATR f2c_chop_stack_(memhandle)
-    Integer *memhandle;
+public Boolean FATR f2c_chop_stack_(Integer *memhandle)
 {
     return MA_chop_stack(*memhandle);
 }
 
 
-public Boolean FATR f2c_free_heap_(memhandle)
-    Integer *memhandle;
+public Boolean FATR f2c_free_heap_(Integer *memhandle)
 {
     return MA_free_heap(*memhandle);
 }
 
 
-public Boolean FATR f2c_free_heap_piece_(memhandle, nelem)
-    Integer *memhandle;
-    Integer *nelem;
+public Boolean FATR f2c_free_heap_piece_(Integer *memhandle, Integer *nelem)
 {
     return MA_free_heap_piece(*memhandle, *nelem);
 }
 
 
-public Boolean FATR f2c_get_index_(memhandle, index)
-    Integer *memhandle;
-    MA_AccessIndex *index;
+public Boolean FATR f2c_get_index_(Integer *memhandle, MA_AccessIndex *index)
 {
     Boolean value = MA_get_index(*memhandle, index);
 
@@ -106,34 +78,25 @@ public Boolean FATR f2c_get_index_(memhandle, index)
 }
 
 
-public Boolean FATR f2c_get_next_memhandle_(ithandle, memhandle)
-    Integer *ithandle;
-    Integer *memhandle;
+public Boolean FATR f2c_get_next_memhandle_(Integer *ithandle, Integer *memhandle)
 {
     return MA_get_next_memhandle(ithandle, memhandle);
 }
 
 
-public Boolean FATR f2c_get_numalign_(value)
-    Integer *value;
+public Boolean FATR f2c_get_numalign_(Integer *value)
 {
     return MA_get_numalign(value);
 }
 
 
-public Boolean FATR f2c_inform_base_(datatype, address1, address2)
-    Integer *datatype;
-    Pointer address1;
-    Pointer address2;
+public Boolean FATR f2c_inform_base_(Integer *datatype, Pointer address1, Pointer address2)
 {
     return MAi_inform_base(*datatype, address1, address2);
 }
 
 
-public Boolean FATR f2c_init_(datatype, nominal_stack, nominal_heap)
-    Integer *datatype;
-    Integer *nominal_stack;
-    Integer *nominal_heap;
+public Boolean FATR f2c_init_(Integer *datatype, Integer *nominal_stack, Integer *nominal_heap)
 {
     return MA_init(*datatype, *nominal_stack, *nominal_heap);
 }
@@ -145,92 +108,70 @@ public Boolean FATR f2c_initialized_()
 }
 
 
-public Boolean FATR f2c_init_memhandle_iterator_(ithandle)
-    Integer *ithandle;
+public Boolean FATR f2c_init_memhandle_iterator_(Integer *ithandle)
 {
     return MA_init_memhandle_iterator(ithandle);
 }
 
 
-public Integer FATR f2c_inquire_avail_(datatype)
-    Integer *datatype;
+public Integer FATR f2c_inquire_avail_(Integer *datatype)
 {
     return MA_inquire_avail(*datatype);
 }
 
 
-public Integer FATR f2c_inquire_heap_(datatype)
-    Integer *datatype;
+public Integer FATR f2c_inquire_heap_(Integer *datatype)
 {
     return MA_inquire_heap(*datatype);
 }
 
 
-public Integer FATR f2c_inquire_heap_check_stack_(datatype)
-    Integer *datatype;
+public Integer FATR f2c_inquire_heap_check_stack_(Integer *datatype)
 {
     return MA_inquire_heap_check_stack(*datatype);
 }
 
 
-public Integer FATR f2c_inquire_heap_no_partition_(datatype)
-    Integer *datatype;
+public Integer FATR f2c_inquire_heap_no_partition_(Integer *datatype)
 {
     return MA_inquire_heap_no_partition(*datatype);
 }
 
 
-public Integer FATR f2c_inquire_stack_(datatype)
-    Integer *datatype;
+public Integer FATR f2c_inquire_stack_(Integer *datatype)
 {
     return MA_inquire_stack(*datatype);
 }
 
 
-public Integer FATR f2c_inquire_stack_check_heap_(datatype)
-    Integer *datatype;
+public Integer FATR f2c_inquire_stack_check_heap_(Integer *datatype)
 {
     return MA_inquire_stack_check_heap(*datatype);
 }
 
 
-public Integer FATR f2c_inquire_stack_no_partition_(datatype)
-    Integer *datatype;
+public Integer FATR f2c_inquire_stack_no_partition_(Integer *datatype)
 {
     return MA_inquire_stack_no_partition(*datatype);
 }
 
 
-public Boolean FATR f2c_pop_stack_(memhandle)
-    Integer *memhandle;
+public Boolean FATR f2c_pop_stack_(Integer *memhandle)
 {
     return MA_pop_stack(*memhandle);
 }
 
 
-public void FATR f2c_print_stats_(printroutines)
-    Boolean *printroutines;
+public void FATR f2c_print_stats_(Boolean *printroutines)
 {
     MA_print_stats(*printroutines);
 }
 
 
 #ifdef F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS
-public Boolean FATR f2c_push_get_(datatype, nelem, name, memhandle, index, namesize)
-    Integer *datatype;
-    Integer *nelem;
-    char    *name;
-    Integer *memhandle;
-    MA_AccessIndex *index;
-    int  namesize;    /* implicitly passed by FORTRAN */
+public Boolean FATR f2c_push_get_(Integer *datatype, Integer *nelem, char *name, Integer *memhandle, MA_AccessIndex *index, int  namesize)
 #else /* F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS */
-public Boolean FATR f2c_push_get_(datatype, nelem, name, namesize, memhandle, index)
-    Integer *datatype;
-    Integer *nelem;
-    char    *name;
-    int  namesize;    /* implicitly passed by FORTRAN */
-    Integer *memhandle;
-    MA_AccessIndex *index;
+public Boolean FATR f2c_push_get_(Integer *datatype, Integer *nelem, char *name, int  namesize, Integer *memhandle, MA_AccessIndex *index)
 #endif /* F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS */
 {
     Boolean    value;
@@ -249,19 +190,9 @@ public Boolean FATR f2c_push_get_(datatype, nelem, name, namesize, memhandle, in
 
 
 #ifdef F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS
-public Boolean FATR f2c_push_stack_(datatype, nelem, name, memhandle, namesize)
-    Integer *datatype;
-    Integer *nelem;
-    char    *name;
-    Integer *memhandle;
-    int  namesize;    /* implicitly passed by FORTRAN */
+public Boolean FATR f2c_push_stack_(Integer *datatype, Integer *nelem, char *name, Integer *memhandle, int  namesize)
 #else /* F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS */
-public Boolean FATR f2c_push_stack_(datatype, nelem, name, namesize, memhandle)
-    Integer *datatype;
-    Integer *nelem;
-    char    *name;
-    int  namesize;
-    Integer *memhandle;
+public Boolean FATR f2c_push_stack_(Integer *datatype, Integer *nelem, char *name, int  namesize, Integer *memhandle)
 #endif /* F2C_HIDDEN_STRING_LENGTH_AFTER_ARGS */
 {
     char buf[MA_NAMESIZE];
@@ -273,45 +204,37 @@ public Boolean FATR f2c_push_stack_(datatype, nelem, name, namesize, memhandle)
 }
 
 
-public Boolean FATR f2c_set_auto_verify_(value)
-    Integer *value;
+public Boolean FATR f2c_set_auto_verify_(Integer *value)
 {
     return MA_set_auto_verify((Boolean)*value);
 }
 
 
-public Boolean FATR f2c_set_error_print_(value)
-    Integer *value;
+public Boolean FATR f2c_set_error_print_(Integer *value)
 {
     return MA_set_error_print((Boolean)*value);
 }
 
 
-public Boolean FATR f2c_set_hard_fail_(value)
-    Integer *value;
+public Boolean FATR f2c_set_hard_fail_(Integer *value)
 {
     return MA_set_hard_fail((Boolean)*value);
 }
 
 
-public Boolean FATR f2c_set_numalign_(value)
-    Integer *value;
+public Boolean FATR f2c_set_numalign_(Integer *value)
 {
     return MA_set_numalign(*value);
 }
 
 
-public Integer FATR f2c_sizeof_(datatype1, nelem1, datatype2)
-    Integer *datatype1;
-    Integer *nelem1;
-    Integer *datatype2;
+public Integer FATR f2c_sizeof_(Integer *datatype1, Integer *nelem1, Integer *datatype2)
 {
     return MA_sizeof(*datatype1, *nelem1, *datatype2);
 }
 
 
-public Integer FATR f2c_sizeof_overhead_(datatype)
-    Integer *datatype;
+public Integer FATR f2c_sizeof_overhead_(Integer *datatype)
 {
     return MA_sizeof_overhead(*datatype);
 }
@@ -324,8 +247,7 @@ public void FATR f2c_summarize_allocated_blocks_()
 }
 
 
-public void FATR f2c_trace_(value)
-    Integer *value;
+public void FATR f2c_trace_(Integer *value)
 {
     MA_trace((Boolean)*value);
 }

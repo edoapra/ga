@@ -501,10 +501,10 @@ private Stats ma_stats;
  * after performing any splitting.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        *ad;         the AD to test */
+/*    Pointer    ar;         allocation request */
 
-private Boolean ad_big_enough(ad, ar)
-    AD        *ad;        /* the AD to test */
-    Pointer    ar;        /* allocation request */
+private Boolean ad_big_enough(AD *ad, Pointer ar)
 {
     Pointer    client_space;    /* location of client_space */
     ulongi    nbytes;        /* length of block for ar */
@@ -533,10 +533,10 @@ private Boolean ad_big_enough(ad, ar)
  * Return MA_TRUE if ad == ad_target, else return MA_FALSE.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        *ad;         the AD to test */
+/*    Pointer    ad_target;     the AD to match */
 
-private Boolean ad_eq(ad, ad_target)
-    AD        *ad;        /* the AD to test */
-    Pointer    ad_target;    /* the AD to match */
+private Boolean ad_eq(AD *ad, Pointer ad_target)
 {
     return (ad == (AD *)ad_target) ? MA_TRUE : MA_FALSE;
 }
@@ -546,10 +546,10 @@ private Boolean ad_eq(ad, ad_target)
  * Return MA_TRUE if ad > ad_target, else return MA_FALSE.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        *ad         the AD to test */
+/*    Pointer    ad_target;     the AD to match */
 
-private Boolean ad_gt(ad, ad_target)
-    AD        *ad;        /* the AD to test */
-    Pointer    ad_target;    /* the AD to match */
+private Boolean ad_gt(AD *ad, Pointer ad_target)
 {
     return (ad > (AD *)ad_target) ? MA_TRUE : MA_FALSE;
 }
@@ -559,10 +559,10 @@ private Boolean ad_gt(ad, ad_target)
  * Return MA_TRUE if ad <= ad_target, else return MA_FALSE.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        *ad;         the AD to test */
+/*    Pointer    ad_target;     the AD to match */
 
-private Boolean ad_le(ad, ad_target)
-    AD        *ad;        /* the AD to test */
-    Pointer    ad_target;    /* the AD to match */
+private Boolean ad_le(AD *ad, Pointer ad_target)
 {
     return (ad <= (AD *)ad_target) ? MA_TRUE : MA_FALSE;
 }
@@ -572,10 +572,10 @@ private Boolean ad_le(ad, ad_target)
  * Return MA_TRUE if ad < ad_target, else return MA_FALSE.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        *ad;         the AD to test */
+/*   Pointer    ad_target;     the AD to match */
 
-private Boolean ad_lt(ad, ad_target)
-    AD        *ad;        /* the AD to test */
-    Pointer    ad_target;    /* the AD to match */
+private Boolean ad_lt(AD *ad, Pointer ad_target)
 {
     return (ad < (AD *)ad_target) ? MA_TRUE : MA_FALSE;
 }
@@ -585,10 +585,10 @@ private Boolean ad_lt(ad, ad_target)
  * Print identifying information about the given AD to stdout.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        *ad;         to print */
+/*    char    *block_type;     for output */
 
-private void ad_print(ad, block_type)
-    AD        *ad;        /* to print */
-    char    *block_type;    /* for output */
+private void ad_print(AD *ad, Pointer block_type)
 {
     Integer    memhandle;    /* memhandle for AD */
 
@@ -614,12 +614,12 @@ private void ad_print(ad, block_type)
  * the new block are modified.
  */
 /* ------------------------------------------------------------------------- */
+/*    AR        *ar;         allocation request */
+/*   Pointer    address;     to allocate after */
+/*    Pointer    *client_space;     RETURN: location of client_space */
+/*    ulongi    *nbytes;     RETURN: length of block */
 
-private void balloc_after(ar, address, client_space, nbytes)
-    AR        *ar;        /* allocation request */
-    Pointer    address;    /* to allocate after */
-    Pointer    *client_space;    /* RETURN: location of client_space */
-    ulongi    *nbytes;    /* RETURN: length of block */
+private void balloc_after(AR *ar, Pointer address, Pointer *client_space, ulongi *nbytes)
 {
     Integer    datatype;    /* of elements in this block */
     ulongi    L_client_space;    /* length of client_space */
@@ -730,12 +730,12 @@ private void balloc_after(ar, address, client_space, nbytes)
  * the new block are modified.
  */
 /* ------------------------------------------------------------------------- */
+/*    AR        *ar;         allocation request */
+/*    Pointer    address;     to allocate before */
+/*    Pointer    *client_space;    RETURN: location of client_space */
+/*    ulongi    *nbytes;     RETURN: length of block */
 
-private void balloc_before(ar, address, client_space, nbytes)
-    AR        *ar;        /* allocation request */
-    Pointer    address;    /* to allocate before */
-    Pointer    *client_space;    /* RETURN: location of client_space */
-    ulongi    *nbytes;    /* RETURN: length of block */
+private void balloc_before(AR *ar, Pointer address, Pointer *client_space, ulongi *nbytes)
 {
     Integer    datatype;    /* of elements in this block */
     ulongi    L_client_space;    /* length of client_space */
@@ -840,8 +840,7 @@ private void balloc_before(ar, address, client_space, nbytes)
  */
 /* ------------------------------------------------------------------------- */
 
-private void block_free_heap(ad)
-    AD        *ad;        /* AD to free */
+private void block_free_heap(AD *ad)
 {
     AD        *ad2;        /* traversal pointer */
     AD        *max_ad;    /* rightmost AD */
@@ -895,11 +894,11 @@ private void block_free_heap(ad)
  * Return a pointer to the new block (NULL if not created).
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        *ad;         the AD to split */
+/*    ulongi    bytes_needed;     from ad */
+/*    Boolean    insert_free;     insert in free list? */
 
-private AD *block_split(ad, bytes_needed, insert_free)
-    AD        *ad;        /* the AD to split */
-    ulongi    bytes_needed;    /* from ad */
-    Boolean    insert_free;    /* insert in free list? */
+private AD *block_split(AD *ad, ulongi bytes_needed, Boolean insert_free)
 {
     ulongi    bytes_extra;    /* in ad */
     AD        *ad2;        /* the new AD */
@@ -948,8 +947,7 @@ private AD *block_split(ad, bytes_needed, insert_free)
  */
 /* ------------------------------------------------------------------------- */
 
-private ulongi checksum(ad)
-    AD        *ad;        /* the AD to compute checksum for */
+private ulongi checksum(AD *ad)
 {
     return (ulongi)(
                 ad->datatype +
@@ -966,8 +964,7 @@ private ulongi checksum(ad)
 
 #ifdef DEBUG
 
-private void debug_ad_print(ad)
-    AD        *ad;        /* the AD to print */
+private void debug_ad_print(AD *ad)
 {
 #define NUMADFIELDS 7
 
@@ -1036,8 +1033,7 @@ private void debug_ad_print(ad)
  */
 /* ------------------------------------------------------------------------- */
 
-private Boolean guard_check(ad)
-    AD        *ad;        /* the AD to check guards for */
+private Boolean guard_check(AD *ad)
 {
     Guard    signature;    /* value to be read */
     Pointer    guard;        /* address to read from */
@@ -1062,8 +1058,7 @@ private Boolean guard_check(ad)
  */
 /* ------------------------------------------------------------------------- */
 
-private void guard_set(ad)
-    AD        *ad;        /* the AD to set guards for */
+private void guard_set(AD *ad)
 {
     Guard    signature;    /* value to be written */
     Pointer    guard;        /* address to write to */
@@ -1085,8 +1080,7 @@ private void guard_set(ad)
  */
 /* ------------------------------------------------------------------------- */
 
-private void list_coalesce(list)
-    AD        *list;        /* the list to coalesce */
+private void list_coalesce(AD *list)
 {
     AD        *ad1;        /* lead traversal pointer */
     AD        *ad2;        /* trailing traversal pointer */
@@ -1118,9 +1112,7 @@ private void list_coalesce(list)
  */
 /* ------------------------------------------------------------------------- */
 
-private AD *list_delete(ad, list)
-    AD        *ad;        /* the AD to delete */
-    AD        **list;        /* the list to delete from */
+private AD *list_delete(AD *ad, AD **list)
 {
     return list_delete_one(list, ad_eq, (Pointer)ad);
 }
@@ -1132,12 +1124,12 @@ private AD *list_delete(ad, list)
  * not NULL).  Return the number of elements deleted.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        **list;         the list to search */
+/*    Boolean    (*pred)();     predicate */
+/*    Pointer    closure;     for pred */
+/*    void    (*action)();     to apply before deletion */
 
-private int list_delete_many(list, pred, closure, action)
-    AD        **list;        /* the list to search */
-    Boolean    (*pred)();    /* predicate */
-    Pointer    closure;    /* for pred */
-    void    (*action)();    /* to apply before deletion */
+private int list_delete_many(AD **list, Boolean (*pred)(), Pointer closure, void (*action)())
 {
     AD        *ad1;        /* lead traversal pointer */
     AD        *ad2;        /* trailing traversal pointer */
@@ -1182,11 +1174,11 @@ private int list_delete_many(list, pred, closure, action)
  * return NULL.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        **list;         the list to search */
+/*    Boolean    (*pred)();     predicate */
+/*    Pointer    closure;     for pred */
 
-private AD *list_delete_one(list, pred, closure)
-    AD        **list;        /* the list to search */
-    Boolean    (*pred)();    /* predicate */
-    Pointer    closure;    /* for pred */
+private AD *list_delete_one(AD **list, Boolean (*pred)(), Pointer closure)
 {
     AD        *ad1;        /* lead traversal pointer */
     AD        *ad2;        /* trailing traversal pointer */
@@ -1223,9 +1215,7 @@ private AD *list_delete_one(list, pred, closure)
  */
 /* ------------------------------------------------------------------------- */
 
-private void list_insert(ad, list)
-    AD        *ad;        /* the AD to insert */
-    AD        **list;        /* the list to insert into */
+private void list_insert(AD *ad, AD **list)
 {
     /* push ad onto list */
     ad->next = *list;
@@ -1239,11 +1229,11 @@ private void list_insert(ad, list)
  * insert ad after the last element of list.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        *ad;         the AD to insert */
+/*    AD        **list;         the list to insert into */
+/*    Boolean    (*pred)();     predicate */
 
-private void list_insert_ordered(ad, list, pred)
-    AD        *ad;        /* the AD to insert */
-    AD        **list;        /* the list to insert into */
-    Boolean    (*pred)();    /* predicate */
+private void list_insert_ordered(AD *ad, AD **list, Boolean    (*pred)())
 {
     AD        *ad1;        /* lead traversal pointer */
     AD        *ad2;        /* trailing traversal pointer */
@@ -1291,9 +1281,7 @@ private void list_insert_ordered(ad, list, pred)
  */
 /* ------------------------------------------------------------------------- */
 
-private Boolean list_member(ad, list)
-    AD        *ad;        /* the AD to search for */
-    AD        *list;        /* the list to search */
+private Boolean list_member(AD *ad, AD *list)
 {
     AD        *ad1;        /* traversal pointer */
 
@@ -1312,11 +1300,11 @@ private Boolean list_member(ad, list)
  * number of blocks on list.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        *list;         to print */
+/*    char    *block_type;     for output */
+/*    int        index_base;     0 (C) or 1 (FORTRAN) */
 
-private int list_print(list, block_type, index_base)
-    AD        *list;        /* to print */
-    char    *block_type;    /* for output */
-    int        index_base;    /* 0 (C) or 1 (FORTRAN) */
+private int list_print(AD *list, char *block_type, int index_base)
 {
     AD        *ad;        /* traversal pointer */
     int        nblocks;    /* # of blocks on list */
@@ -1350,17 +1338,16 @@ private int list_print(list, block_type, index_base)
  * in the bad_ parameters.
  */
 /* ------------------------------------------------------------------------- */
+/*    AD        *list;         to verify */
+/*    char    *block_type;     for error messages */
+/*    char    *preamble;     printed before first error message */
+/*    int        *blocks;     RETURN: # of blocks */
+/*    int        *bad_blocks;     RETURN: # of blocks having errors */
+/*    int        *bad_checksums;     RETURN: # of blocks having bad checksum */
+/*    int        *bad_lguards;     RETURN: # of blocks having bad guard1 */
+/*    int        *bad_rguards;     RETURN: # of blocks having bad guard2 */
 
-private void list_verify(list, block_type, preamble, blocks,
-                         bad_blocks, bad_checksums, bad_lguards, bad_rguards)
-    AD        *list;        /* to verify */
-    char    *block_type;    /* for error messages */
-    char    *preamble;    /* printed before first error message */
-    int        *blocks;    /* RETURN: # of blocks */
-    int        *bad_blocks;    /* RETURN: # of blocks having errors */
-    int        *bad_checksums;    /* RETURN: # of blocks having bad checksum */
-    int        *bad_lguards;    /* RETURN: # of blocks having bad guard1 */
-    int        *bad_rguards;    /* RETURN: # of blocks having bad guard2 */
+private void list_verify(AD *list, char *block_type, char *preamble, int *blocks, int *bad_blocks, int *bad_checksums, int *bad_lguards, int *bad_rguards)
 {
     AD        *ad;        /* traversal pointer */
     Boolean    first_bad_block;/* first bad block found? */
@@ -1468,9 +1455,7 @@ private void list_verify(list, block_type, preamble, blocks,
  */
 /* ------------------------------------------------------------------------- */
 
-private Integer ma_max_heap_frag_nelem(datatype, min_nelem)
-    Integer    datatype;    /* of elements */
-    Integer    min_nelem;    /* for fragment to be considered */
+private Integer ma_max_heap_frag_nelem(Integer datatype, Integer min_nelem)
 {
     ulongi    min_bytes;    /* for fragment to be considered */
     AD        *ad;        /* traversal pointer */
@@ -1526,11 +1511,11 @@ private Integer ma_max_heap_frag_nelem(datatype, min_nelem)
  * be accomodated in length bytes starting at address.
  */
 /* ------------------------------------------------------------------------- */
+/*    Pointer    address;     location of hypothetical block */
+/*    ulongi    length;         length of hypothetical block */
+/*    Integer    datatype;     of elements in hypothetical block */
 
-private Integer ma_nelem(address, length, datatype)
-    Pointer    address;    /* location of hypothetical block */
-    ulongi    length;        /* length of hypothetical block */
-    Integer    datatype;    /* of elements in hypothetical block */
+private Integer ma_nelem(Pointer address, ulongi length, Integer datatype)
 {
     AR        ar;        /* allocation request */
     Pointer    client_space;    /* location of client_space */
@@ -1568,9 +1553,9 @@ private Integer ma_nelem(address, length, datatype)
  * before MA_init is called.
  */
 /* ------------------------------------------------------------------------- */
+/*    char    *caller;     name of calling routine */
 
-private void ma_preinitialize(caller)
-    char    *caller;    /* name of calling routine */
+private void ma_preinitialize(char *caller)
 {
     if (ma_preinitialized)
         return;
@@ -1595,12 +1580,12 @@ private void ma_preinitialize(caller)
  * MA_FALSE.
  */
 /* ------------------------------------------------------------------------- */
+/*    Integer    memhandle;     the handle to verify and convert */
+/*    AD        **adout;     RETURN: AD corresponding to memhandle */
+/*    BlockLocation location;     where AD must reside */
+/*    char    *caller;     name of calling routine */
 
-private Boolean mh2ad(memhandle, adout, location, caller)
-    Integer    memhandle;    /* the handle to verify and convert */
-    AD        **adout;    /* RETURN: AD corresponding to memhandle */
-    BlockLocation location;    /* where AD must reside */
-    char    *caller;    /* name of calling routine */
+private Boolean mh2ad(Integer memhandle, AD **adout, BlockLocation location, char *caller)
 {
     AD        *ad;
     Boolean    check_checksum = MA_TRUE;
@@ -1739,8 +1724,7 @@ private Boolean mh2ad(memhandle, adout, location, caller)
  */
 /* ------------------------------------------------------------------------- */
 
-private void mh_free(ad)
-    AD        *ad;        /* the AD whose memhandle to free */
+private void mh_free(AD *ad)
 {
     Integer    memhandle;    /* memhandle for AD */
 
@@ -1762,10 +1746,10 @@ private void mh_free(ad)
  * Return the first multiple of unit which is >= value.
  */
 /* ------------------------------------------------------------------------- */
+/*    size_t    value;         to round */
+/*    ulongi    unit;         to round to */
 
-private size_t mai_round(value, unit)
-    size_t    value;        /* to round */
-    ulongi    unit;        /* to round to */
+private size_t mai_round(size_t    value, ulongi unit)
 {
     /* voodoo ... */
     unit--;
@@ -1779,11 +1763,11 @@ private size_t mai_round(value, unit)
  * Copy at most maxchars-1 non-NUL chars from from to to; NUL-terminate to.
  */
 /* ------------------------------------------------------------------------- */
+/*    char    *to;         space to copy to */
+/*    char    *from;         space to copy from */
+/*    int        maxchars;     max # of chars (including NUL) copied */
 
-private void str_ncopy(to, from, maxchars)
-    char    *to;        /* space to copy to */
-    char    *from;        /* space to copy from */
-    int        maxchars;    /* max # of chars (including NUL) copied */
+private void str_ncopy(char *to, char *from, int maxchars)
 {
     if (from == (char *)NULL)
     {
@@ -1807,11 +1791,11 @@ private void str_ncopy(to, from, maxchars)
  * Set the base address and size of the given datatype.
  */
 /* ------------------------------------------------------------------------- */
+/*    Integer    datatype;     to set size of */
+/*    Pointer    address1;     of datatype element base */
+/*    Pointer    address2;     of an adjacent datatype element */
 
-public Boolean MAi_inform_base(datatype, address1, address2)
-    Integer    datatype;    /* to set size of */
-    Pointer    address1;    /* of datatype element base */
-    Pointer    address2;    /* of an adjacent datatype element */
+public Boolean MAi_inform_base(Integer datatype, Pointer address1, Pointer address2)
 {
     /* verify uninitialization */
     if (ma_initialized)
@@ -1865,9 +1849,9 @@ Integer ma_set_sizes_()
  * on the heap or the stack.
  */
 /* ------------------------------------------------------------------------- */
+/*    int        index_base;     0 (C) or 1 (FORTRAN) */
 
-public void MAi_summarize_allocated_blocks(index_base)
-    int        index_base;    /* 0 (C) or 1 (FORTRAN) */
+public void MAi_summarize_allocated_blocks(int index_base)
 {
     int        heap_blocks;    /* # of blocks on heap used list */
     int        stack_blocks;    /* # of blocks on stack used list */
