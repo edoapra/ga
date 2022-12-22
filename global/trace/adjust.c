@@ -43,9 +43,7 @@ int proc=0, arrays=0, event_types=0;
 
 static int tcomp(const void *t1, const void *t2);
 
-int main(argc,argv)
-int argc;
-char **argv;
+int main(int argc, char **argv)
 {
 long int p,i,j,MR,events=0;
 unsigned long int k, *clock_base, *times, base=0, *tbase, maxtime=0;
@@ -200,8 +198,7 @@ char *foutname="adjust.ed", fdstrname[15], finname[8];
 }
    
       
-static int tcomp(t1, t2)
-const void *t1, *t2;
+static int tcomp(const void *t1, const void *t2)
 {
 int flag;
     flag = (*(unsigned long int*)t1 == *(unsigned long int*)t2) ? 0 :
@@ -211,10 +208,7 @@ int flag;
 
 
 #ifdef PRINT_STATS
-void update(proc,record, t0, t1)
-long int proc;
-int *record;
-unsigned long t0,t1;
+void update(long int proc, int *record, unsigned long t0, unsigned long t1)
 {
 int ar=record[1], et=record[6];
 
@@ -238,9 +232,7 @@ int ar=record[1], et=record[6];
 
 
 
-void printstat(proc,tlast)
-int proc;
-unsigned tlast;
+void printstat(int proc, unsigned tlast)
 {
 int p,e,a;
 double t,ta,te, tl= 1e-6 * tlast;

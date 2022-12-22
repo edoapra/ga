@@ -2694,9 +2694,7 @@ void pnga_scatter2d(Integer g_a, void *v, Integer *i, Integer *j, Integer nv)
 #   pragma weak wnga_scatter_acc2d = pnga_scatter_acc2d
 #endif
 
-void pnga_scatter_acc2d(g_a, v, i, j, nv, alpha)
-     Integer g_a, nv, *i, *j;
-     void *v, *alpha;
+void pnga_scatter_acc2d(Integer g_a, void *v, Integer *i, Integer *j, Integer nv, void *alpha)
 {
 register Integer k;
 Integer item_size;

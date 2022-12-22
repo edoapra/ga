@@ -18,8 +18,7 @@ int p;
 int LocFound(int *patch);
 
 
-int **idim2(row,col)
-int row,col;
+int **idim2(int row, int col)
 {
    register int **prow, *pdata, i;
    
@@ -40,8 +39,7 @@ int row,col;
    return(prow);
 }
 
-float **fdim2(row,col)
-int row,col;
+float **fdim2(int row, int col)
 {
    int i;
    register float **prow, *pdata;
@@ -63,9 +61,7 @@ int row,col;
    return(prow);
 }
 
-int main(argc,argv)
-int argc;
-char **argv;
+int main(int argc, char **argv)
 {
 FILE *fin;
 char ln[100];
@@ -145,8 +141,7 @@ unsigned long time;
 }
 
 
-int diff(a,b,n)
-int *a,*b,n;
+int diff(int *a, int *b, int n)
 {
   int i;
   for (i=0;i<n;i++) if(a[i]!=b[i])return(1);
@@ -154,8 +149,7 @@ int *a,*b,n;
 }
 
 
-int LocFound(patch)
-int *patch;
+int LocFound(int *patch)
 /* Uses 2 hash functions and exhaustive search to find existing patch *
  * if not found then returns the first found empty slot               */
 {
