@@ -47,8 +47,7 @@
  */
 /* ------------------------------------------------------------------------- */
 
-unsigned int str_len(s)
-    char        *s;        /* string */
+unsigned int str_len(char *s)
 {
     int            length = 0;
 
@@ -79,11 +78,11 @@ unsigned int str_len(s)
  * Restriction: slist can contain no Nstrings.
  */
 /* ------------------------------------------------------------------------- */
+/*    char        *s;         string to match */
+/*    char        *slist[];     list of strings to search */
+/*    unsigned int    n;         # of strings in slist */
 
-int str_match(s, slist, n)
-    char        *s;        /* string to match */
-    char        *slist[];    /* list of strings to search */
-    unsigned int    n;        /* # of strings in slist */
+int str_match(char *s, char *slist[], unsigned int n)
 {
     size_t     i;        /* loop index */
     size_t     length;        /* of s */

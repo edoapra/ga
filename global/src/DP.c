@@ -10,10 +10,9 @@
 #include "ga-papi.h"
 #include "ga-wapi.h"
 
-/*\ check if I own the patch
-\*/
-static logical own_patch(g_a, ilo, ihi, jlo, jhi)
-     Integer g_a, ilo, ihi, jlo, jhi;
+/* check if I own the patch
+*/
+static logical own_patch(Integer g_a, Integer ilo, Integer ihi, Integer jlo, Integer jhi)
 {
    Integer ilop, ihip, jlop, jhip, me=pnga_nodeid();
    Integer lo[2],hi[2];
@@ -27,9 +26,7 @@ static logical own_patch(g_a, ilo, ihi, jlo, jhi)
    else return(TRUE);
 }
 
-static logical patch_intersect(ilo, ihi, jlo, jhi, ilop, ihip, jlop, jhip)
-     Integer ilo, ihi, jlo, jhi;
-     Integer *ilop, *ihip, *jlop, *jhip;
+static logical patch_intersect(Integer ilo, Integer ihi, Integer jlo, Integer jhi, Integer *ilop, Integer *ihip, Integer *jlop, Integer *jhip)
 {
      /* check consistency of patch coordinates */
      if( ihi < ilo || jhi < jlo)     return FALSE; /* inconsistent */
@@ -47,19 +44,15 @@ static logical patch_intersect(ilo, ihi, jlo, jhi, ilop, ihip, jlop, jhip)
 }
 
 
-/*\ COPY A PATCH 
+/* COPY A PATCH 
  *
  *  . identical shapes 
  *  . copy by column order - Fortran convention
-\*/
+*/
 #if HAVE_SYS_WEAK_ALIAS_PRAGMA
 #   pragma weak wnga_copy_patch_dp = pnga_copy_patch_dp
 #endif
-void pnga_copy_patch_dp(t_a, g_a, ailo, aihi, ajlo, ajhi,
-                   g_b, bilo, bihi, bjlo, bjhi)
-     Integer g_a, ailo, aihi, ajlo, ajhi;
-     Integer g_b, bilo, bihi, bjlo, bjhi;
-     char *t_a;
+void pnga_copy_patch_dp(char *t_a, Integer g_a, Integer ailo, Integer aihi, Integer ajlo, Integer ajhi, Integer g_b, Integer bilo, Integer bihi, Integer bjlo, Integer bjhi)
 {
 Integer atype, btype, adim1, adim2, bdim1, bdim2;
 Integer ilos, ihis, jlos, jhis;
@@ -159,11 +152,8 @@ Integer ndim, dims[2];
 #if HAVE_SYS_WEAK_ALIAS_PRAGMA
 #   pragma weak wnga_ddot_patch_dp = pnga_ddot_patch_dp
 #endif
-DoublePrecision pnga_ddot_patch_dp(g_a, t_a, ailo, aihi, ajlo, ajhi,
-                                  g_b, t_b, bilo, bihi, bjlo, bjhi)
-     Integer g_a, ailo, aihi, ajlo, ajhi;    /* patch of g_a */
-     Integer g_b, bilo, bihi, bjlo, bjhi;    /* patch of g_b */
-     char    *t_a, *t_b;                          /* transpose operators */
+DoublePrecision pnga_ddot_patch_dp(Integer g_a, char *t_a, Integer ailo, Integer aihi, Integer ajlo, Integer ajhi,
+				   Integer g_b, char *t_b, Integer bilo, Integer bihi, Integer bjlo, Integer bjhi)
 {
 Integer atype, btype, adim1, adim2, bdim1, bdim2;
 Integer iloA, ihiA, jloA, jhiA, ldA;

@@ -18,7 +18,7 @@
  ** function types
  **/
 
-extern unsigned int str_len();
-extern int str_match();
+extern unsigned int str_len(char *s);
+extern int str_match(char *s, char *slist[], unsigned int n);
 
 #endif /* _string_util_h */

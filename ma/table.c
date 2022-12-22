@@ -78,8 +78,7 @@ private Integer ma_table_next_slot = 0;
  */
 /* ------------------------------------------------------------------------- */
 
-public Integer ma_table_allocate(data)
-    TableData    data;        /* to store */
+public Integer ma_table_allocate(TableData data)
 {
     Table    new_ma_table;
     Integer    new_ma_table_capacity;
@@ -164,8 +163,7 @@ public Integer ma_table_allocate(data)
  */
 /* ------------------------------------------------------------------------- */
 
-public void ma_table_deallocate(handle)
-    Integer    handle;        /* to deallocate */
+public void ma_table_deallocate(Integer handle)
 {
     if (ma_table_verify(handle, "ma_table_deallocate"))
     {
@@ -185,8 +183,7 @@ public void ma_table_deallocate(handle)
  */
 /* ------------------------------------------------------------------------- */
 
-public TableData ma_table_lookup(handle)
-    Integer    handle;        /* to lookup */
+public TableData ma_table_lookup(Integer handle)
 {
     if (ma_table_verify(handle, "ma_table_lookup"))
         /* success */
@@ -207,8 +204,7 @@ public TableData ma_table_lookup(handle)
  */
 /* ------------------------------------------------------------------------- */
 
-public Integer ma_table_lookup_assoc(data)
-    TableData    data;        /* to lookup */
+public Integer ma_table_lookup_assoc(TableData data)
 {
     Integer    i;
 
@@ -229,10 +225,10 @@ public Integer ma_table_lookup_assoc(data)
  * error message.
  */
 /* ------------------------------------------------------------------------- */
+/*    Integer    handle;         to verify */
+/*    char    *caller;     name of calling routine */
 
-public Boolean ma_table_verify(handle, caller)
-    Integer    handle;        /* to verify */
-    char    *caller;    /* name of calling routine */
+public Boolean ma_table_verify(Integer handle, char *caller)
 {
     Boolean    badhandle;    /* is handle invalid? */
 

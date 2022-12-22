@@ -1818,14 +1818,10 @@ void ngai_do_elem2_oper(Integer atype, Integer cndim, Integer *loC, Integer *hiC
   }
 }
 
-/*\  generic operation of two patches
-\*/
-static void ngai_elem2_patch_(g_a, alo, ahi, g_b, blo, bhi,
-                              g_c, clo, chi, op)
-Integer g_a, *alo, *ahi;    /* patch of g_a */
-Integer g_b, *blo, *bhi;    /* patch of g_b */
-Integer g_c, *clo, *chi;    /* patch of g_c */
-int op; /* operation to be perform between g_a and g_b */
+/*  generic operation of two patches
+*/
+static void ngai_elem2_patch_(Integer g_a, Integer *alo, Integer *ahi, Integer g_b, Integer *blo, Integer *bhi,
+                              Integer g_c, Integer *clo, Integer *chi, int op)
 {
   Integer i, j;
   Integer compatible;
@@ -2832,8 +2828,7 @@ static void ngai_has_negative_element(Integer atype, Integer andim, Integer *loA
   }
 }
 
-static Integer has_negative_elem(g_a, alo, ahi)
-Integer g_a, *alo, *ahi;    /* patch of g_a */
+static Integer has_negative_elem(Integer g_a, Integer *alo, Integer *ahi)
 /*returned value: 1=found; 0 = not found*/
 {
   Integer i;
@@ -3484,10 +3479,7 @@ void ga_step_max_patch_(g_a,  alo, ahi, g_b,  blo, bhi, result, op)
 #if HAVE_SYS_WEAK_ALIAS_PRAGMA
 #   pragma weak wnga_step_max_patch = pnga_step_max_patch
 #endif
-void pnga_step_max_patch(g_a,  alo, ahi, g_b,  blo, bhi, result) 
-     Integer g_a, *alo, *ahi;    /* patch of g_a */
-     Integer g_b, *blo, *bhi;    /* patch of g_b */
-     void *result;
+void pnga_step_max_patch(Integer g_a, Integer *alo, Integer *ahi, Integer g_b, Integer *blo, Integer *bhi, void *result) 
 #if 0
      Integer op; /* operations */
 #endif
