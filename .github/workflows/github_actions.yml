@@ -184,6 +184,15 @@ jobs:
           ls -lart
           mkdir -p $GITHUB_WORKSPACE/apps
           if [[ "$F77" == "ifort" ]] || [[ "$CC" == "icc" ]] ; then ./travis/install-intel.sh; source ${{ matrix.oneapi }}/setvars.sh --force;  fi
+          echo "#### test compilers ####"
+          "$F77" -v
+          "$CC" -v
+          echo "### test mpif90 mpicc -show ###"
+          mpicc -show
+          mpif90 -show
+          echo "### test mpif90 mpicc -v ###"
+          mpicc -v
+          mpif90 -v
           sh ./travis/install-autotools.sh $GITHUB_WORKSPACE/apps
       - name: install
         run: |
