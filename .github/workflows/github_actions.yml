@@ -172,6 +172,10 @@ jobs:
           macos*)
           brew update
           brew install gcc coreutils automake || true
+          echo '###### check gfortran #######'
+          ls -l /usr/local/Cellar/gcc/*/bin
+          gfortan -v
+          
           ;;
           esac
           if [[ "$F77" == "ifort" ]] || [[ "$CC" == "icc" ]] ; then ./travis/install-intel.sh; source ${{ matrix.oneapi }}/setvars.sh --force;  fi
