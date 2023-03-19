@@ -171,9 +171,12 @@ jobs:
           ;;
           macos*)
           brew update
-          brew install gcc coreutils automake || true
+          brew install  coreutils automake || true
+          brew reinstall gcc || true
           echo '###### check gfortran #######'
           ls -l /usr/local/Cellar/gcc/*/bin
+          echo '### ls ######'
+          ls -lrt /usr/local/bin/g* ||true
           gfortan -v
           
           ;;
