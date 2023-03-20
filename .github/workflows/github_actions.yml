@@ -173,12 +173,12 @@ jobs:
           brew update
           brew install  coreutils automake || true
           brew reinstall gcc || true
-          brew link gcc
+          brew link gcc || true
           echo '###### check gfortran #######'
           ls -l /usr/local/Cellar/gcc/*/bin
           echo '### ls ######'
           ls -lrt /usr/local/bin/g* ||true
-          gfortan -v
+          gfortran -v
           
           ;;
           esac
