@@ -119,6 +119,8 @@ jobs:
             cc: gcc
             oneapi: /opt/intel/oneapi
         exclude:
+          - armci_network: ofi
+            os: macos-latest
           - armci_network: mpi-pr
             mpi_impl: openmpi
           - armci_network: mpi3
