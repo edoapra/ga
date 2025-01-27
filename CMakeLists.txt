@@ -411,6 +411,7 @@ add_library(ga
   $<TARGET_OBJECTS:sf>
   $<TARGET_OBJECTS:gaf2c>
   $<TARGET_OBJECTS:armci_comex>
+  $<TARGET_OBJECTS:cmx>
   $<TARGET_OBJECTS:ga_src>
   ${ga_ref_blas}
   ${ga_profiler}
@@ -457,6 +458,7 @@ add_subdirectory(comex)
 if(ENABLE_CXX)
 add_subdirectory(ga++)
 endif()
+add_subdirectory(cmx)
 add_subdirectory(ma)
 add_subdirectory(pario)
 add_subdirectory(gaf2c)
