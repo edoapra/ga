@@ -118,6 +118,12 @@ jobs:
             f77: ifort
             cc: gcc
             oneapi: /opt/intel/oneapi
+          - os: macos-latest
+            experimental: true
+            mpi_impl: mpich
+            armci_network: mpi-ts
+            f77: gfortran-14
+            cc: gcc-14
         exclude:
           - armci_network: ofi
             os: macos-latest
