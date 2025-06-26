@@ -3110,6 +3110,9 @@ Integer pnga_sprs_array_matmat_multiply(Integer s_a, Integer s_b)
  * @param icol index of column to be extracted
  * @return g_v 1D global array representing column icol
  */
+#if HAVE_SYS_WEAK_ALIAS_PRAGMA
+#   pragma weak wnga_sprs_array_get_column =  pnga_sprs_array_get_column
+#endif
 Integer pnga_sprs_array_get_column(Integer s_a, Integer icol)
 {
   Integer g_v;
@@ -3414,7 +3417,7 @@ Integer pnga_sprs_array_create_from_sparse(Integer s_a,
   if (trans) {
     map[me+1] = SPA[handle].ilo+1;
   } else {
-    map[me+1] = SPA[handle].ilo+1;
+    map[me] = SPA[handle].ilo+1;
   }
   plus[0] = '+';
   plus[1] = '\0';

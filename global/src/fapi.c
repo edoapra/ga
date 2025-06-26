@@ -885,12 +885,12 @@ void FATR nga_proc_topology_(Integer* g_a, Integer* proc, Integer* subscript)
   wnga_proc_topology(*g_a, *proc, subscript);
 }
 
-DoublePrecision FATR ga_rand(Integer *iseed)
+DoublePrecision FATR ga_rand_(Integer *iseed)
 {
   return wnga_rand(*iseed);
 }
 
-DoublePrecision FATR nga_rand(Integer *iseed)
+DoublePrecision FATR nga_rand_(Integer *iseed)
 {
   return wnga_rand(*iseed);
 }
@@ -3804,6 +3804,11 @@ void nga_sprs_array_access_col_block_(Integer *s_a, Integer *icol,
         AccessIndex *idx, AccessIndex *jdx, AccessIndex *vdx)
 {
   wnga_sprs_array_access_col_block_idx(*s_a, *icol, idx, jdx, vdx);
+}
+
+Integer nga_sprs_array_get_column_(Integer *s_a, Integer *icol)
+{
+  return wnga_sprs_array_get_column(*s_a, *icol);
 }
 
 void nga_sprs_array_col_block_list_(Integer *s_a, Integer *idx, Integer *n)
