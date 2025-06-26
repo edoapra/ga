@@ -9,6 +9,23 @@ This project follows the [Gitflow Workflow model](https://www.atlassian.com/git/
 ## [Unreleased]
 The Unreleased section will be empty for tagged releases. Unreleased functionality appears in the develop branch.
 
+## [5.9.2]
+- Changed
+  - Updated versions of blaspp, lapackpp
+- Fixed
+  - Fixed a bug in the fortran interface for the nga_rand function
+  - Removed minor memory leak from EAF_Delete function
+
+## [5.9.1]
+- Changed
+  - Updated OS's for continuous integration
+  - Converted ARMCI_Error to use const char* instead of char*
+- Fixed
+  - Data type mismatch in EAF fixed
+  - Fixed group sync in sketch algorithm
+  - Fixed some mismatches between long and int64_t data types
+  - Added build system fixes for gcc version 14
+
 ## [5.9]
 - Known Bugs
   - The MPI RMA port still does poorly with older releases of MPI. Currently,

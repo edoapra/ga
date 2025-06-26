@@ -7,7 +7,7 @@
 #define GA_MAX_CACHE 10
 
 #define GA_VERSION_MAJOR 5
-#define GA_VERSION_MINOR 8
+#define GA_VERSION_MINOR 9
 #define GA_VERSION_PATCH 2
 
 #define C_CHAR     MT_C_CHAR
