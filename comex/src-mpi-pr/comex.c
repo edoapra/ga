@@ -7562,6 +7562,7 @@ STATIC void check_devshm(int fd, size_t size){
   struct statfs ufs_statfs;
   long newspace;
   if (g_state.rank == (g_state.node_size -1))  return;
+  long ranks_pn = (g_state.node_size -1)*get_num_progress_ranks_per_node();
   if (!devshm_initialized) {
     fstatfs(fd, &ufs_statfs);
     devshm_initialized = 1;
@@ -7570,11 +7571,11 @@ STATIC void check_devshm(int fd, size_t size){
 // #define DEBUGSHM 1
 #define CONVERT_TO_M 1048576
 #ifdef DEBUGSHM
-    fprintf(stderr, "[%d] nodesize %d init /dev/shm size %ld  bsize %ld  nodesize %ld \n",
-	    g_state.rank, g_state.node_size, devshm_fs_initial/CONVERT_TO_M, (long) ufs_statfs.f_bsize, (long)  g_state.node_size);
+    fprintf(stderr, "[%d] ranks_pn %ld init /dev/shm size %ld  bsize %ld  nodesize %ld \n",
+	    g_state.rank, ranks_pn, devshm_fs_initial/CONVERT_TO_M, (long) ufs_statfs.f_bsize, (long)  g_state.node_size);
 #endif
   }
-    newspace = (long) ( size*(g_state.node_size -1));
+    newspace = (long) ( size*ranks_pn);
     if(newspace>0){
     fstatfs(fd, &ufs_statfs);
 #ifdef DEBUGSHM
@@ -7613,7 +7614,7 @@ STATIC void count_open_fds(void) {
     FILE *f = fopen("/proc/sys/fs/file-nr", "r");
 
     long nfiles, unused, maxfiles;
-    fscanf(f, "%ld %ld %ld", &nfiles, &unused, &maxfiles);
+    if(!fscanf(f, "%ld %ld %ld", &nfiles, &unused, &maxfiles)) comex_error("count_open_fds: fscanf failed", -1);
 #ifdef DEBUGSHM
     if(nfiles % 1000 == 0) fprintf(stderr," %d: no. open files = %ld maxfiles = %ld\n", g_state.rank, nfiles, maxfiles);
 #endif
