@@ -1,11 +1,17 @@
 set( ILP64_FOUND TRUE CACHE BOOL "ILP64 Flags Found" FORCE )
 set( ILP64_COMPILE_OPTIONS
-        # Ensure 64-bit executables for GNU C,CXX,Fortran
-        $<$<AND:$<COMPILE_LANGUAGE:CXX,C,Fortran>,$<C_COMPILER_ID:GNU>>:-m64>
         # Make default integers 64-bit for Fortran
         $<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<C_COMPILER_ID:Intel,PGI>>:-i8>
         $<$<AND:$<COMPILE_LANGUAGE:Fortran>,$<C_COMPILER_ID:GNU,Flang,LLVMFlang>>:-fdefault-integer-8>
         )
+
+if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    list( APPEND ILP64_COMPILE_OPTIONS
+        # Ensure 64-bit executables for GNU C,CXX,Fortran
+        $<$<AND:$<COMPILE_LANGUAGE:CXX,C,Fortran>,$<C_COMPILER_ID:GNU>>:-m64>
+    )
+endif()
+
 set( ILP64_COMPILE_OPTIONS "${ILP64_COMPILE_OPTIONS}" CACHE STRING "ILP64 compile options" FORCE )
 
 foreach (lang C CXX Fortran)
@@ -13,7 +19,9 @@ foreach (lang C CXX Fortran)
         continue()
     endif()
     if ( CMAKE_${lang}_COMPILER_ID STREQUAL GNU )
-        list( APPEND ILP64_${lang}_COMPILE_OPTIONS -m64 )
+        if(NOT CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+            list( APPEND ILP64_${lang}_COMPILE_OPTIONS -m64 )
+        endif()
     endif()
     if ( lang STREQUAL Fortran )
         if ( CMAKE_Fortran_COMPILER_ID STREQUAL Intel OR CMAKE_Fortran_COMPILER_ID STREQUAL PGI )
