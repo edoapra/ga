@@ -241,10 +241,13 @@ jobs:
           if [[ $MPI_IMPL == "openmpi" ]]; then MPIROOT=open-mpi ; fi
           export PATH=$GITHUB_WORKSPACE/apps/$MPIROOT/bin:$PATH
           mpif90 -show
+          NPROCS=4
+          if [[ $PORT == "mpi-pr" ]]; then NPROCS=$(($NPROCS +1)); fi
+          echo using $NPROCS processes
           if [[ $MPI_IMPL == "openmpi" ]]; then
-          make F77=$F77 check-ga  MPIEXEC="timeout 8m mpirun --allow-run-as-root -mca mpi_yield_when_idle 0 --oversubscribe -np 4" || true
+          make F77=$F77 check-ga  MPIEXEC="timeout 8m mpirun --allow-run-as-root -mca mpi_yield_when_idle 0 --oversubscribe -np $NPROCS" || true
           else
-          make F77=$F77 check-ga  MPIEXEC="timeout 8m mpirun -np 4" || true
+          make F77=$F77 check-ga  MPIEXEC="timeout 8m mpirun -np $NPROCS" || true
           fi
           fi
       - name: after_check_ga_failure
