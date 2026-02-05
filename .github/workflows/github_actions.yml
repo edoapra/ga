@@ -231,3 +231,19 @@ jobs:
           cat /Users/runner/work/ga/ga/build/CMakeFiles/CMakeOutput.log || true
           echo '***********'
           cat /Users/runner/work/ga/ga/build/CMakeFiles/CMakeError.log || true
+      - name: test global arrays
+        if: ${{ success() }}
+        run: |
+          if [[ $USE_CMAKE != "Y" ]] && [[ $USE_SICM != "Y" ]]; then
+          if [[ "$F77" == "ifort" ]] || [[ "$CC" == "icc" ]] || [[ "$CC" == "icx" ]] ; then  source ${{ matrix.oneapi }}/setvars.sh --force;  fi
+          echo mpif90 location $(find $GITHUB_WORKSPACE/apps -name mpif90) || true
+          MPIROOT=$MPI_IMPL
+          if [[ $MPI_IMPL == "openmpi" ]]; then MPIROOT=open-mpi ; fi
+          export PATH=$GITHUB_WORKSPACE/apps/$MPIROOT/bin:$PATH
+          mpif90 -show
+          if [[ $MPI_IMPL == "openmpi" ]]; then
+          make F77=$F77 check-ga  MPIEXEC="mpirun --allow-run-as-root -mca mpi_yield_when_idle 0 --oversubscribe -np 4"
+          else
+          make F77=$F77 check-ga  MPIEXEC="mpirun -np 4"
+          fi
+          fi
