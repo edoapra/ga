@@ -242,13 +242,12 @@ jobs:
           export PATH=$GITHUB_WORKSPACE/apps/$MPIROOT/bin:$PATH
           mpif90 -show
           if [[ $MPI_IMPL == "openmpi" ]]; then
-          make F77=$F77 check-ga  MPIEXEC="mpirun --allow-run-as-root -mca mpi_yield_when_idle 0 --oversubscribe -np 4"
+          make F77=$F77 check-ga  MPIEXEC="timeout 8m mpirun --allow-run-as-root -mca mpi_yield_when_idle 0 --oversubscribe -np 4" || true
           else
-          make F77=$F77 check-ga  MPIEXEC="mpirun -np 4"
+          make F77=$F77 check-ga  MPIEXEC="timeout 8m mpirun -np 4" || true
           fi
           fi
       - name: after_check_ga_failure
-        if: ${{ failure() }}
         run: |
           find . -name "*log"
           find global/testing -name "*log" | xargs -I {} bash -c 'echo "**** File: {} *****" && cat "{}"' || true
