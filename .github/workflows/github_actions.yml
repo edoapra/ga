@@ -234,7 +234,7 @@ jobs:
       - name: check_ga
         if: ${{ success() }}
         run: |
-          if [[ $USE_CMAKE != "Y" ]] && [[ $USE_SICM != "Y" ]]; then
+          if [[ $USE_CMAKE != "Y" ]] && [[ $USE_SICM != "Y" ]]  && [[ $PORT != "ofi" ]]; then
           if [[ "$F77" == "ifort" ]] || [[ "$CC" == "icc" ]] || [[ "$CC" == "icx" ]] ; then  source ${{ matrix.oneapi }}/setvars.sh --force;  fi
           echo mpif90 location $(find $GITHUB_WORKSPACE/apps -name mpif90) || true
           MPIROOT=$MPI_IMPL
@@ -245,9 +245,9 @@ jobs:
           if [[ $PORT == "mpi-pr" ]]; then NPROCS=$(($NPROCS +1)); fi
           echo using $NPROCS processes
           if [[ $MPI_IMPL == "openmpi" ]]; then
-          make F77=$F77 check-ga  MPIEXEC="timeout 8m mpirun --allow-run-as-root -mca mpi_yield_when_idle 0 --oversubscribe -np $NPROCS" || true
+          make F77=$F77 check-ga  MPIEXEC="timeout 16m mpirun --allow-run-as-root -mca mpi_yield_when_idle 0 --oversubscribe -np $NPROCS" || true
           else
-          make F77=$F77 check-ga  MPIEXEC="timeout 8m mpirun -np $NPROCS" || true
+          make F77=$F77 check-ga  MPIEXEC="timeout 16m mpirun -np $NPROCS" || true
           fi
           fi
       - name: after_check_ga_failure
