@@ -231,7 +231,7 @@ jobs:
           cat /Users/runner/work/ga/ga/build/CMakeFiles/CMakeOutput.log || true
           echo '***********'
           cat /Users/runner/work/ga/ga/build/CMakeFiles/CMakeError.log || true
-      - name: test global arrays
+      - name: check_ga
         if: ${{ success() }}
         run: |
           if [[ $USE_CMAKE != "Y" ]] && [[ $USE_SICM != "Y" ]]; then
@@ -247,3 +247,9 @@ jobs:
           make F77=$F77 check-ga  MPIEXEC="mpirun -np 4"
           fi
           fi
+      - name: after_check_ga_failure
+        if: ${{ failure() }}
+        run: |
+          find . -name "*log"
+          find global/testing -name "*log" | xargs -I {} bash -c 'echo "**** File: {} *****" && cat "{}"' || true
+          find -name "test-suite.log" | xargs -I {} bash -c 'echo "$$$$ File: {} $$$$$" && cat "{}"' || true
