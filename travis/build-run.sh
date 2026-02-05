@@ -59,7 +59,7 @@ case "$os" in
 	if [[ $( [ $xcode_v -ge 15 ] && echo 1) ]] ; then
 	    export LDFLAGS=" -ld_classic "
            #       export LDFLAGS=" -ld_classic -L /opt/homebrew/lib -lhwloc -lxml2.2 "
-           #brew install hwloc
+           brew reinstall hwloc || true
            if command -v pkg-config >& /dev/null ; then
                if pkg-config --exists hwloc; then
                    export LDFLAGS=" -ld_classic $(pkg-config --libs-only-L hwloc 2> /dev/null) -lhwloc -lxml2.2"
