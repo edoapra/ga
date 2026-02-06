@@ -188,6 +188,13 @@ jobs:
           if [[ "$F77" == "ifx" ]] || [[ "$CC" == "icc" ]] || [[ "$CC" == "icx" ]]; then ./travis/install-intel.sh; source ${{ matrix.oneapi }}/setvars.sh --force;  fi
           echo F77 is `which "$F77"`
           echo F77 compiler version `"$F77" -v`
+      - name: patch source code if needed
+        run: |
+          if [[ "$CC" == "icx" ]]; then
+          sudo apt-get install -q -y patch
+          echo patching g2test to prevent icx failures
+          patch -p0  < ./travis/g2t.patch
+          fi
       - name: before_install
         if: steps.ga-cache-install.outputs.cache-hit != 'true'
         run: |
