@@ -50,7 +50,7 @@ jobs:
             experimental: true
             mpi_impl: intel
             armci_network: sockets
-            config_opts: --enable-i4
+            config_opts: --enable-i4 --disable-openmp
             f77: ifort
             cc: icx
             oneapi: /opt/intel/oneapi
@@ -96,6 +96,7 @@ jobs:
             armci_network: mpi-pr
             f77: gfortran-14
             cc: gcc-14
+            config_opts: "--disable-openmp"
           - os: ubuntu-22.04
             experimental: true
             use_cmake: "Y"
@@ -231,3 +232,28 @@ jobs:
           cat /Users/runner/work/ga/ga/build/CMakeFiles/CMakeOutput.log || true
           echo '***********'
           cat /Users/runner/work/ga/ga/build/CMakeFiles/CMakeError.log || true
+      - name: check_ga
+        if: ${{ success() }}
+        run: |
+          if [[ $USE_CMAKE != "Y" ]] && [[ $USE_SICM != "Y" ]]  && [[ $PORT != "ofi" ]]; then
+          if [[ "$F77" == "ifort" ]] || [[ "$CC" == "icc" ]] || [[ "$CC" == "icx" ]] ; then  source ${{ matrix.oneapi }}/setvars.sh --force;  fi
+          echo mpif90 location $(find $GITHUB_WORKSPACE/apps -name mpif90) || true
+          MPIROOT=$MPI_IMPL
+          if [[ $MPI_IMPL == "openmpi" ]]; then MPIROOT=open-mpi ; fi
+          export PATH=$GITHUB_WORKSPACE/apps/$MPIROOT/bin:$PATH
+          mpif90 -show
+          NPROCS=4
+          if [[ $PORT == "mpi-pr" ]]; then NPROCS=$(($NPROCS +1)); fi
+          echo using $NPROCS processes
+          if [[ $MPI_IMPL == "openmpi" ]]; then
+          make F77=$F77 check-ga  MPIEXEC="timeout 16m mpirun --allow-run-as-root -mca mpi_yield_when_idle 0 --oversubscribe -np $NPROCS" || true
+          else
+          make F77=$F77 check-ga  MPIEXEC="timeout 16m mpirun -np $NPROCS"
+          fi
+          fi
+      - name: after_check_ga_failure
+        if: ${{ failure() }}
+        run: |
+          find . -name "*log"
+          find . -name "test-suite.log" | xargs -I {} bash -c 'echo "$$$$ File: {} $$$$$" && cat "{}"' || true
+          find global/testing -name "*log" | xargs -I {} bash -c 'echo "**** File: {} *****" && cat "{}"' || true
