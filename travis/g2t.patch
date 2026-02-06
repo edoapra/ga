@@ -1,0 +1,15 @@
+--- global/testing/g2test.F.org	2026-02-06 09:13:33.839633132 -0800
++++ global/testing/g2test.F	2026-02-06 09:13:46.365715783 -0800
+@@ -19,9 +19,9 @@
+ #define TEST_3
+ #define TEST_4
+ c#define TEST_5
+-#define TEST_6
+-#define TEST_7
+-#define TEST_8
++c#define TEST_6
++c#define TEST_7
++c#define TEST_8
+ 
+       program main
+       implicit none

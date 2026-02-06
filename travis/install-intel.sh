@@ -3,7 +3,7 @@
 # <http://mpi4py.scipy.org/>, and then modified for Julia
 
 set -e
-set -x
+#set -x
 
 os=`uname`
 
@@ -66,48 +66,35 @@ case "$os" in
     Linux)
 	export APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 	export TERM=dumb
-        rm -f l_Base*sh l_HP*sh
-	tries=0 ; until [ "$tries" -ge 10 ] ; do \
-		      dir_base="20f4e6a1-6b0b-4752-b8c1-e5eacba10e01"
-		      dir_hpc="1b2baedd-a757-4a79-8abb-a5bf15adae9a"
-		      base="l_BaseKit_p_2024.0.0.49564"
-		      hpc="l_HPCKit_p_2024.0.0.49589"
-		      wget -nv https://registrationcenter-download.intel.com/akdlm/IRC_NAS/"$dir_hpc"/"$hpc".sh \
-			  && wget -nv  https://registrationcenter-download.intel.com/akdlm/IRC_NAS/"$dir_base"/"$base".sh \
+	wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | gpg --dearmor | sudo tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null
+	echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
+	sudo apt-get update
+
+	if [[ "$MPI_IMPL" == "intel" ]]; then
+	    mpi_bin="intel-oneapi-mpi" ; mpi_libdev="intel-oneapi-mpi-devel" scalapack_libdev=" "
+	fi
+	echo pkg to install:  $mpi_libdev $mpi_bin 
+        tries=0 ; until [ "$tries" -ge 10 ] ; do \
+		      sudo apt-get -y install gfortran make perl rsync $mpi_libdev $mpi_bin $pkg_extra \
 			  && break ;\
-			  tries=$((tries+1)) ; echo attempt no.  $tries    ; sleep 30 ;  done
-            sh ./"$base".sh -a -c -s --action install --components intel.oneapi.lin.mkl.devel --install-dir $IONEAPI_ROOT  --eula accept
-	    if [[ "$?" != 0 ]]; then
-		df -h
-		echo "base kit install failed: exit code " "${?}"
-		exit 1
-	    fi
-	    rm  -rf $IONEAPI_ROOT/mkl/latest/lib/ia32
-	    rm  -rf $IONEAPI_ROOT/mkl/latest/lib/intel64/*sycl*
-	    rm  -rf $IONEAPI_ROOT/mkl/latest/lib/intel64/*_pgi_*
-	    rm  -rf $IONEAPI_ROOT/mkl/latest/lib/intel64/*_gf_*
-	    intel_components="intel.oneapi.lin.ifort-compiler:intel.oneapi.lin.dpcpp-cpp-compiler"
-	    if [[ "$MPI_IMPL" == "intel" ]]; then
-		intel_components+=":intel.oneapi.lin.mpi.devel"
-	    fi
-            sh ./"$hpc".sh -a -c -s --action install \
-               --components  "$intel_components"  \
-               --install-dir $IONEAPI_ROOT     --eula accept
-	    if [[ "$?" != 0 ]]; then
-		df -h
-		echo "hpc kit install failed: exit code " "${?}"
-		exit 1
-	    fi
-	    rm  -rf $IONEAPI_ROOT/compiler/latest/linux/lib/oclfpga
-	    rm -f ./"$hpc".sh ./"$base".sh
-	    rm  -rf $IONEAPI_ROOT/compiler/latest/linux/lib/oclfpga || true
-	
-	source "$IONEAPI_ROOT"/setvars.sh --force || true
-	    export I_MPI_F90=ifort
-	    export I_MPI_F77=ifort
+		      tries=$((tries+1)) ; echo attempt no.  $tries    ; sleep 30 ;  done
+
+	sudo apt-get install -y intel-oneapi-compiler-fortran intel-oneapi-mkl intel-oneapi-compiler-dpcpp-cpp  libfabric-bin libnuma1
+	if [[ "$?" != 0 ]]; then
+	    df -h
+	    echo "intel-oneapi-compiler-fortran install failed: exit code " "${?}"
+	    exit 1
+	fi
+        source "$IONEAPI_ROOT"/setvars.sh || true
+	FC=ifx
+	export I_MPI_F90="$FC"
+	export I_MPI_F77="$FC"
+	"$FC" -V ; if [[ $? != 0 ]]; then echo "Intel SW install failed"; exit 1; fi
+	icx -V
+	sudo rm -rf $MKLROOT/lib/*sycl* || true
 	which mpif90
 	mpif90 -show
 esac
-which ifort
-ifort -V
+which ifx
+ifx -V
 echo ""##### end of  install-intel.sh ####"
