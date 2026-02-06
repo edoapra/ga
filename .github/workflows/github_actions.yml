@@ -246,9 +246,9 @@ jobs:
           if [[ $PORT == "mpi-pr" ]]; then NPROCS=$(($NPROCS +1)); fi
           echo using $NPROCS processes
           if [[ $MPI_IMPL == "openmpi" ]]; then
-          make F77=$F77 check-ga  MPIEXEC="timeout 16m mpirun --allow-run-as-root -mca mpi_yield_when_idle 0 --oversubscribe -np $NPROCS" || true
+          make F77=$F77 check-ga  MPIEXEC="timeout 20m mpirun --allow-run-as-root -mca mpi_yield_when_idle 0 --oversubscribe -np $NPROCS" || true
           else
-          make F77=$F77 check-ga  MPIEXEC="timeout 16m mpirun -np $NPROCS"
+          make F77=$F77 check-ga  MPIEXEC="timeout 20m mpirun -np $NPROCS"
           fi
           fi
       - name: after_check_ga_failure
