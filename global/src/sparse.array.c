@@ -717,7 +717,7 @@ logical pnga_sprs_array_assemble(Integer s_a)
 {
   Integer hdl = GA_OFFSET + s_a;
   int local_sync_begin,local_sync_end;
-  Integer lo, hi, ld;
+  Integer lo, hi, dlo, dhi, ld;
   Integer i,j,ilo,ihi,jlo,jhi;
   int64_t *offset;
   Integer *count;
@@ -916,7 +916,6 @@ logical pnga_sprs_array_assemble(Integer s_a)
   free(SPA[hdl].idx);
   free(SPA[hdl].jdx);
   free(SPA[hdl].val);
-
   free(count);
   free(top);
   free(list);
