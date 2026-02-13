@@ -154,9 +154,11 @@ void setup_dense_matrix(int *g_a, void **a, int64_t dim, int type)
   int two = 2;
   int dims[2],lo[2],hi[2],ld[2];
 
+  /*
   if (me == 0) {
     printf("\n  Create dense matrix of size %ld x %ld\n",dim,dim);
   }
+  */
 
   /* Create dense matrix */
   *g_a = NGA_Create_handle();
@@ -1733,11 +1735,11 @@ void matrix_test(int type)
   time /= (double)nprocs;
   if (me == 0) {
     if (ok) {
-      printf("    **Sparse-dense matrix-matrix multiply operation PASSES**\n");
+      printf("\n    **Sparse-dense matrix-matrix multiply operation PASSES**\n");
       printf("    Time for sparse-dense matrix-matrix"
           " multiply operation: %16.8f\n",time);
     } else {
-      printf("    **Sparse-dense matrix-matrix multiply operation FAILS**\n");
+      printf("\n    **Sparse-dense matrix-matrix multiply operation FAILS**\n");
     }
   }
 
@@ -1872,11 +1874,11 @@ void matrix_test(int type)
   time /= (double)nprocs;
   if (me == 0) {
     if (ok) {
-      printf("    **Dense-sparse matrix-matrix multiply operation PASSES**\n");
+      printf("\n    **Dense-sparse matrix-matrix multiply operation PASSES**\n");
       printf("    Time for dense-sparse matrix-matrix"
           " multiply operation: %16.8f\n",time);
     } else {
-      printf("    **Dense-sparse matrix-matrix multiply operation FAILS**\n");
+      printf("\n    **Dense-sparse matrix-matrix multiply operation FAILS**\n");
     }
   }
 
@@ -2002,10 +2004,10 @@ void matrix_test(int type)
   time /= (double)nprocs;
   if (me == 0) {
     if (ok) {
-      printf("    **Create from dense array operation PASSES**\n");
+      printf("\n    **Create from dense array operation PASSES**\n");
       printf("    Time for create from dense array operation: %16.8f\n",time);
     } else {
-      printf("    **Sparse create from dense array operation FAILS**\n");
+      printf("\n    **Sparse create from dense array operation FAILS**\n");
     }
   }
 
@@ -2083,10 +2085,10 @@ void matrix_test(int type)
   time /= (double)nprocs;
   if (me == 0) {
     if (ok) {
-      printf("    **Create from sparse array operation PASSES**\n");
+      printf("\n    **Create from sparse array operation PASSES**\n");
       printf("    Time for create from sparse array operation: %16.8f\n",time);
     } else {
-      printf("    **Sparse create from sparse array operation FAILS**\n");
+      printf("\n    **Sparse create from sparse array operation FAILS**\n");
     }
   }
 }
