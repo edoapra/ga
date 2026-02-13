@@ -438,4 +438,5 @@ int pnga_sprs_array_num_nonzeros(Integer g_a)
     }
   }
   pnga_pgroup_gop(GA[handle].p_handle,type,&cnt,nprocs,"+");
+  return cnt;
 }
