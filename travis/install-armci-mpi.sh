@@ -37,7 +37,8 @@ git clone -b master --depth 200 https://github.com/jeffhammond/armci-mpi.git ${A
 cd ${ARMCI_MPI_DIR}
 #git checkout 981fefd5b778287dd578d02e4ca70c24fcade9e1
 #git checkout 8ccfcbfd115574fe297068e31b22f3ab8d778bd0
-git checkout 3ae5c6feeab2b099fc0bacccb9d1a01bf00e43da
+#git checkout 3ae5c6feeab2b099fc0bacccb9d1a01bf00e43da
+git checkout 7304b52d681e3645ec2c51c2ad8206d0dbe3bfea
 cd ..
 if ! [ -f ${ARMCI_MPI_DIR}/configure ] ; then
   cd ${ARMCI_MPI_DIR}
