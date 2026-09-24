@@ -127,6 +127,9 @@ jobs:
             mpi_impl: openmpi
           - armci_network: ofi
             mpi_impl: openmpi
+          - armci_network: armci
+            os: ubuntu-latest
+            mpi_impl: mpich
       fail-fast: false
     env:
         MPI_IMPL: ${{ matrix.mpi_impl }}
