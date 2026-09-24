@@ -39,10 +39,11 @@
 
 
 #define USE_MPI_REQUESTS
+#define USE_MPI_WIN_ALLOC
 /*
 #define USE_MPI_FLUSH_LOCAL
-*/
 #define USE_MPI_WIN_ALLOC
+*/
 
 #ifdef USE_MPI_FLUSH_LOCAL
 #define USE_MPI_REQUESTS
@@ -3332,8 +3333,18 @@ int comex_malloc(void *ptrs[], size_t size, comex_group_t group)
       tsize = 8;
     }
 #ifdef USE_MPI_WIN_ALLOC
-    MPI_Win_allocate(sizeof(char)*tsize,1,MPI_INFO_NULL,comm,&reg_entries[comm_rank].buf,
-        &reg_entries[comm_rank].win);
+    MPI_Info win_hints = MPI_INFO_NULL;
+    if (tsize <= 16){
+      MPI_Info_create(&win_hints);
+      MPI_Info_set(win_hints, "accumulate_ops", "same_op_no_op");
+    }
+    MPI_Win_allocate(sizeof(char)*tsize,1,
+		     (win_hints == MPI_INFO_NULL) ? MPI_INFO_NULL : win_hints,
+		     comm,&reg_entries[comm_rank].buf,
+		     &reg_entries[comm_rank].win);
+    if (tsize <= 16) MPI_Info_free(&win_hints);
+    //    MPI_Win_create(reg_entries[comm_rank].buf,tsize,1,win_info,comm,
+    //    &reg_entries[comm_rank].win);
 #else
     MPI_Alloc_mem(tsize,MPI_INFO_NULL,&reg_entries[comm_rank].buf);
     MPI_Win_create(reg_entries[comm_rank].buf,tsize,1,MPI_INFO_NULL,comm,
