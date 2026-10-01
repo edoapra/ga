@@ -3265,10 +3265,14 @@ int comex_unlock(int mutex, int proc)
   waitlistcopy = (int*)malloc(nproc*sizeof(int));
 
   /* Set value in the wait list */
-  MPI_Win_lock(MPI_LOCK_EXCLUSIVE,proc,0,_mutex_list[idx]);
-  MPI_Get(waitlistcopy,nproc,MPI_INT,proc,0,nproc,MPI_INT,_mutex_list[idx]);
-  MPI_Put(&lock,1,MPI_INT,proc,me*sizeof(int),1,MPI_INT,_mutex_list[idx]);
-  MPI_Win_unlock(proc,_mutex_list[idx]);
+  int ierr = MPI_Win_lock(MPI_LOCK_EXCLUSIVE,proc,0,_mutex_list[idx]);
+  translate_mpi_error(ierr,"comex_unlock:MPI_Win_lock");
+  ierr = MPI_Get(waitlistcopy,nproc,MPI_INT,proc,0,nproc,MPI_INT,_mutex_list[idx]);
+  translate_mpi_error(ierr,"comex_unlock:MPI_Get");
+  ierr = MPI_Put(&lock,1,MPI_INT,proc,me*sizeof(int),1,MPI_INT,_mutex_list[idx]);
+  translate_mpi_error(ierr,"comex_unlock:MPI_Put");
+  ierr = MPI_Win_unlock(proc,_mutex_list[idx]);
+  translate_mpi_error(ierr,"comex_unlock:MPI_Win_unlock");
 
   /* Check to see if someone is waiting for lock */
   ok = 1;
@@ -3280,7 +3284,8 @@ int comex_unlock(int mutex, int proc)
   }
 
   if (!ok) {
-    MPI_Send(&lock, 0, MPI_INT, nextlock, idx, l_state.world_comm);
+    ierr = MPI_Send(&lock, 0, MPI_INT, nextlock, idx, l_state.world_comm);
+    translate_mpi_error(ierr,"comex_unlock:MPI_send");
   }
 
   free(waitlistcopy);
@@ -3344,8 +3349,10 @@ int comex_malloc(void *ptrs[], size_t size, comex_group_t group)
     MPI_Info win_hints = MPI_INFO_NULL;
 #ifdef USE_WIN_HINTS
     if (tsize <= 16){
-      MPI_Info_create(&win_hints);
-      MPI_Info_set(win_hints, "accumulate_ops", "same_op_no_op");
+      ierr = MPI_Info_create(&win_hints);
+      translate_mpi_error(ierr,"comex_malloc:MPI_Info_create");
+      ierr = MPI_Info_set(win_hints, "accumulate_ops", "same_op_no_op");
+      translate_mpi_error(ierr,"comex_malloc:MPI_Info_set");
     }
 #endif
     ierr=MPI_Win_allocate(sizeof(char)*tsize,1,
@@ -3354,7 +3361,10 @@ int comex_malloc(void *ptrs[], size_t size, comex_group_t group)
 		     &reg_entries[comm_rank].win);
     translate_mpi_error(ierr,"comex_malloc:MPI_Win_allocate");
 #ifdef USE_WIN_HINTS
-    if (tsize <= 16) MPI_Info_free(&win_hints);
+    if (tsize <= 16) {
+      ierr = MPI_Info_free(&win_hints);
+      translate_mpi_error(ierr,"comex_malloc:MPI_Info_free");
+    }
 #endif
     //    MPI_Win_create(reg_entries[comm_rank].buf,tsize,1,win_info,comm,
     //    &reg_entries[comm_rank].win);
@@ -3365,7 +3375,8 @@ int comex_malloc(void *ptrs[], size_t size, comex_group_t group)
 #endif
 
 #ifdef USE_MPI_REQUESTS
-    MPI_Win_lock_all(0,reg_entries[comm_rank].win);
+    ierr = MPI_Win_lock_all(0,reg_entries[comm_rank].win);
+    translate_mpi_error(ierr,"comex_malloc:MPI_Win_lock_all");
     /* Use MPI_MODE_NOCHECK instead of 0 */
 #endif
 
@@ -3373,8 +3384,9 @@ int comex_malloc(void *ptrs[], size_t size, comex_group_t group)
     /* exchange buffer address */
     /* @TODO: Consider using MPI_IN_PLACE? */
     memcpy(&src, &reg_entries[comm_rank], sizeof(reg_entry_t));
-    MPI_Allgather(&src, sizeof(reg_entry_t), MPI_BYTE, reg_entries,
+    ierr = MPI_Allgather(&src, sizeof(reg_entry_t), MPI_BYTE, reg_entries,
             sizeof(reg_entry_t), MPI_BYTE, comm);
+      translate_mpi_error(ierr,"comex_malloc:MPI_Allgather");
 
     /* assign the ptr array to return to caller */
     for (i=0; i<comm_size; ++i) {
@@ -3394,7 +3406,8 @@ int comex_malloc(void *ptrs[], size_t size, comex_group_t group)
 
     comex_wait_all(group);
     /* MPI_Win_fence(0,reg_entries[comm_rank].win); */
-    MPI_Barrier(comm);
+    ierr = MPI_Barrier(comm);
+    translate_mpi_error(ierr,"comex_malloc:MPI_Barrier");
 
     return COMEX_SUCCESS;
 #endif
@@ -3469,7 +3482,8 @@ int comex_malloc_mem_dev(void *ptrs[], size_t size, comex_group_t group,
     translate_mpi_error(ierr,"comex_malloc_mem_dev:MPI_Win_create");
 
 #ifdef USE_MPI_REQUESTS
-    MPI_Win_lock_all(0,reg_entries[comm_rank].win);
+    ierr = MPI_Win_lock_all(0,reg_entries[comm_rank].win);
+    translate_mpi_error(ierr,"comex_malloc_mem_dev:MPI_Win_lock_all");
     /* Use MPI_MODE_NOCHECK instead of 0 */
 #endif
 
@@ -3477,8 +3491,9 @@ int comex_malloc_mem_dev(void *ptrs[], size_t size, comex_group_t group,
     /* exchange buffer address */
     /* @TODO: Consider using MPI_IN_PLACE? */
     memcpy(&src, &reg_entries[comm_rank], sizeof(reg_entry_t));
-    MPI_Allgather(&src, sizeof(reg_entry_t), MPI_BYTE, reg_entries,
+    ierr= MPI_Allgather(&src, sizeof(reg_entry_t), MPI_BYTE, reg_entries,
             sizeof(reg_entry_t), MPI_BYTE, comm);
+    translate_mpi_error(ierr,"comex_malloc_mem_dev:MPI_Allgather");
 
     /* assign the ptr array to return to caller */
     for (i=0; i<comm_size; ++i) {
@@ -3498,7 +3513,8 @@ int comex_malloc_mem_dev(void *ptrs[], size_t size, comex_group_t group,
 
     comex_wait_all(group);
     /* MPI_Win_fence(0,reg_entries[comm_rank].win); */
-    MPI_Barrier(comm);
+    ierr = MPI_Barrier(comm);
+    translate_mpi_error(ierr,"comex_malloc_mem_dev:MPI_Barrier");
 
     return COMEX_SUCCESS;
 #endif
@@ -3543,8 +3559,9 @@ int comex_free(void *ptr, comex_group_t group)
     assert(allgather_ptrs);
 
     /* exchange of pointers */
-    MPI_Allgather(&ptr, sizeof(void *), MPI_BYTE,
+    ierr = MPI_Allgather(&ptr, sizeof(void *), MPI_BYTE,
             allgather_ptrs, sizeof(void *), MPI_BYTE, comm);
+    translate_mpi_error(ierr,"comex_free:MPI_Allgather");
 
     /* Get rid of pointers for this window */
     for (i=0; i < comm_size; i++) {
@@ -3564,16 +3581,20 @@ int comex_free(void *ptr, comex_group_t group)
 
     /* free up window */
 #ifdef USE_MPI_REQUESTS
-    MPI_Win_unlock_all(window);
+    ierr =MPI_Win_unlock_all(window);
+    translate_mpi_error(ierr,"comex_free:MPI_Win_unlock_all");
 #endif
-    MPI_Win_free(&window);
+    ierr = MPI_Win_free(&window);
+    translate_mpi_error(ierr,"comex_free:MPI_Win_free");
 #ifndef USE_MPI_WIN_ALLOC
     /* Clear memory for this window */
-    MPI_Free_mem(buf);
+    ierr = MPI_Free_mem(buf);
+    translate_mpi_error(ierr,"comex_free:MPI_Free_mem");
 #endif
 
     /* Is this needed? */
-    MPI_Barrier(comm);
+    ierr = MPI_Barrier(comm);
+    translate_mpi_error(ierr,"comex_free:MPI_Barrier");
 
     return COMEX_SUCCESS;
 #endif
@@ -3617,8 +3638,9 @@ int comex_free_dev(void *ptr, comex_group_t group)
     assert(allgather_ptrs);
 
     /* exchange of pointers */
-    MPI_Allgather(&ptr, sizeof(void *), MPI_BYTE,
+    ierr = MPI_Allgather(&ptr, sizeof(void *), MPI_BYTE,
             allgather_ptrs, sizeof(void *), MPI_BYTE, comm);
+    translate_mpi_error(ierr,"comex_free_dev:MPI_Allgather");
 
     /* Get rid of pointers for this window */
     for (i=0; i < comm_size; i++) {
@@ -3638,14 +3660,17 @@ int comex_free_dev(void *ptr, comex_group_t group)
 
     /* free up window */
 #ifdef USE_MPI_REQUESTS
-    MPI_Win_unlock_all(window);
+    ierr = MPI_Win_unlock_all(window);
+    translate_mpi_error(ierr,"comex_free_dev:MPI_Win_unlock_all");
 #endif
-    MPI_Win_free(&window);
+    ierr = MPI_Win_free(&window);
+    translate_mpi_error(ierr,"comex_free:MPI_Win_free");
     /* Clear memory for this window */
     sicm_free(buf);
 
     /* Is this needed? */
-    MPI_Barrier(comm);
+    ierr = MPI_Barrier(comm);
+    translate_mpi_error(ierr,"comex_free_dev:MPI_Barrier");
 
     return COMEX_SUCCESS;
 #endif
