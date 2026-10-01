@@ -151,6 +151,7 @@ void translate_mpi_error(int ierr, const char* location)
   fprintf(stderr,"p[%d] Error in %s\n",l_state.rank,location);
   MPI_Error_string(ierr,err_string,&len);
   fprintf(stderr,"p[%d] MPI_Error: %s\n",l_state.rank,err_string);
+  comex_error("MPI_error", ierr);
 }
 
 
@@ -300,7 +301,8 @@ int _comex_init(MPI_Comm comm)
     /* sync - initialize first communication epoch */
     comex_fence_all(COMEX_GROUP_WORLD);
     /* Synch - Sanity Check */
-    MPI_Barrier(l_state.world_comm);
+    status = MPI_Barrier(l_state.world_comm);
+    translate_mpi_error(status,"_comex_init: MPI_barrier");
 
     return COMEX_SUCCESS;
 }
@@ -322,10 +324,13 @@ int comex_init_args(int *argc, char ***argv)
 {
     int init_flag;
     
-    MPI_Initialized(&init_flag);
+    int ierr = MPI_Initialized(&init_flag);
+    translate_mpi_error(ierr,"comex_init_args: MPI_initialized");
+
     
     if(!init_flag) {
-        MPI_Init(argc, argv);
+        ierr = MPI_Init(argc, argv);
+	translate_mpi_error(ierr,"comex_init_args: MPI_initialized");
     }
     
     return comex_init();
@@ -1403,7 +1408,8 @@ void vector_to_struct_dtype(void* src_ptr, void *dst_ptr, comex_giov_t *iov,
   MPI_Aint *displacements;
   MPI_Datatype *types;
   MPI_Aint displ;
-  MPI_Type_size(base_type,&size);
+  ierr = MPI_Type_size(base_type,&size);
+  translate_mpi_error(ierr,"vector_to_struct_dtype: MPI_type_size");
   /* allocate buffers to create data types */
   blocklengths = (int*)malloc(nelems*sizeof(int));
   displacements = (MPI_Aint*)malloc(nelems*sizeof(MPI_Aint));
@@ -1629,14 +1635,16 @@ void* create_vector_buf_and_dtypes(void *dst_ptr,
   MPI_Aint *displacements;
   MPI_Datatype *types;
   MPI_Aint displ;
-  MPI_Type_size(base_type,&size);
+  ierr = MPI_Type_size(base_type,&size);
+  translate_mpi_error(ierr,"create_vector_buf_and_dtypes:MPI_Type_size");
   /* find total number of elements */
   nelems = 0;
   for (i=0; i<iov_len; i++) {
     nelems += iov[i].count;
   }
   /* create temporary buffers for scaled accumulate values */
-  MPI_Type_size(base_type, &size);
+  ierr = MPI_Type_size(base_type, &size);
+  translate_mpi_error(ierr,"create_vector_buf_and_dtypes:MPI_Type_size");
   ratio = comex_size/size;
 #if DEBUG
   printf("p[%d] Ratio: %d comex_size: %d size: %d\n",l_state.rank,
@@ -1958,7 +1966,8 @@ int comex_barrier(comex_group_t group)
     comex_fence_all(group);
     ierr = comex_group_comm(group, &comm);
     assert(COMEX_SUCCESS == ierr);
-    MPI_Barrier(comm);
+    ierr = MPI_Barrier(comm);
+    translate_mpi_error(ierr,"comex_barrier:MPI_barrie");
 
     return COMEX_SUCCESS;
 }
@@ -2035,7 +2044,8 @@ int comex_finalize()
     /* groups */
     comex_group_finalize();
 
-    MPI_Barrier(l_state.world_comm);
+    ierr = MPI_Barrier(l_state.world_comm);
+    translate_mpi_error(ierr,"comex_finalize:MPI_barrier");
 
     /* destroy the communicators */
 #if 0
@@ -3332,15 +3342,20 @@ int comex_malloc(void *ptrs[], size_t size, comex_group_t group)
     }
 #ifdef USE_MPI_WIN_ALLOC
     MPI_Info win_hints = MPI_INFO_NULL;
+#ifdef USE_WIN_HINTS
     if (tsize <= 16){
       MPI_Info_create(&win_hints);
       MPI_Info_set(win_hints, "accumulate_ops", "same_op_no_op");
     }
-    MPI_Win_allocate(sizeof(char)*tsize,1,
+#endif
+    ierr=MPI_Win_allocate(sizeof(char)*tsize,1,
 		     (win_hints == MPI_INFO_NULL) ? MPI_INFO_NULL : win_hints,
 		     comm,&reg_entries[comm_rank].buf,
 		     &reg_entries[comm_rank].win);
+    translate_mpi_error(ierr,"comex_malloc:MPI_Win_allocate");
+#ifdef USE_WIN_HINTS
     if (tsize <= 16) MPI_Info_free(&win_hints);
+#endif
     //    MPI_Win_create(reg_entries[comm_rank].buf,tsize,1,win_info,comm,
     //    &reg_entries[comm_rank].win);
 #else
@@ -3397,7 +3412,7 @@ int comex_malloc_mem_dev(void *ptrs[], size_t size, comex_group_t group,
     int i, ierr;
     int comm_rank = -1;
     int comm_size = -1;
-    int tsize;
+    MPI_Aint tsize;
     reg_entry_t src;
 
     /* This will become more complicated */
@@ -3449,8 +3464,9 @@ int comex_malloc_mem_dev(void *ptrs[], size_t size, comex_group_t group,
         fprintf(stderr, "Error in allocating the pool\n");
         exit(11);
     }
-    MPI_Win_create(reg_entries[comm_rank].buf,tsize,1,MPI_INFO_NULL,comm,
+    ierr = MPI_Win_create(reg_entries[comm_rank].buf,tsize,1,MPI_INFO_NULL,comm,
         &reg_entries[comm_rank].win);
+    translate_mpi_error(ierr,"comex_malloc_mem_dev:MPI_Win_create");
 
 #ifdef USE_MPI_REQUESTS
     MPI_Win_lock_all(0,reg_entries[comm_rank].win);
