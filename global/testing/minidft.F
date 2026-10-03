@@ -8,7 +8,7 @@
       integer g_2ceri
       integer nbf,mapa(2),mapb(40),segb
       integer i,j,i0, i1, j0, j1
-      integer adrc,ldc,ibuf,global,heap,stack
+      integer adrc,ldc,ibuf,global,heap,stack,mymem
       logical status
       integer*4 ierr
       logical :: is_supported
@@ -64,12 +64,14 @@ c      call ga_fill(g_2ceri,1.0d00)
       if (i0.gt.0 .and. i0.le.i1) then
          write(6,*) ga_nodeid(),'doing work'
          call ga_access(g_2, i0, i1, j0, j1, adrc, ldc)
+         mymem=(j1-j0+1)*(i1-i0+1)
          do j=j0,j1
-            ibuf=adrc+(j-1)*nbf+i0-1
-c            write(6,*) ga_nodeid(),' ibuf - adrc ',ibuf-adrc
-            if(ibuf-adrc+i1-i0+1.gt.nbf*nbf) then
+            ibuf=adrc+(j-j0)*nbf+i0-1
+!            write(6,*) ga_nodeid(),' ibuf - adrc ',ibuf-adrc
+            if(ibuf-adrc+i1-i0+1.gt.mymem) then
+               write(0,*) 'dcopy out of b ',ibuf-adrc+i1-i0+1,mymem
                call ga_error('out of bounds',
-     c              ibuf-adrc-nbf*nbf+i1-i0+1)
+     c              ibuf-adrc+i1-i0+1-mymem)
             endif
             call dcopy(i1-i0+1, dble(j),0, dbl_mb(ibuf), 1)
          enddo
