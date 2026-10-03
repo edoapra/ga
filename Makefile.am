@@ -528,6 +528,7 @@ check_PROGRAMS += global/testing/overlay
 check_PROGRAMS += global/testing/test_mirrored
 check_PROGRAMS += global/testing/types_test
 check_PROGRAMS += global/testing/field_test
+check_PROGRAMS += global/testing/minidft
 if HAVE_SCALAPACK
 check_PROGRAMS += global/testing/testspd
 endif # HAVE_SCALAPACK
@@ -909,6 +910,7 @@ global_testing_d2test_SOURCES              = global/testing/d2test.F $(gtsrcf)
 global_testing_elempatch_SOURCES           = global/testing/elempatch.c
 global_testing_tiled_irreg_test_SOURCES    = global/testing/tiled_irreg_test.c
 global_testing_field_test_SOURCES          = global/testing/field-test.F $(gtsrcf)
+global_testing_minidft_SOURCES             = global/testing/minidft.F $(gtsrcf)
 global_testing_g2test_SOURCES              = global/testing/g2test.F $(gtsrcf)
 global_testing_g3test_SOURCES              = global/testing/g3test.F $(gtsrcf)
 global_testing_ga_lu_SOURCES               = global/testing/ga_lu.c
